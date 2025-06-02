@@ -19,7 +19,7 @@ class Movement:
         DIRECTION_S_y=-25
         DIRECCTION_S_x=0
         
-  def key_down((self, SPEED_y, POS_j_y, DIRECTION_S_x, DIRECTION_S_y):
+  def key_down(self, SPEED_y, POS_j_y, DIRECTION_S_x, DIRECTION_S_y):
     if POS_j_y<734:
       if pyxel.btn(pyxel.KEY_DOWN):
         SPEED_y=4
@@ -27,7 +27,7 @@ class Movement:
         DIRECTION_S_y=30
         DIRECCTION_S_x=0
         
-  def key_left((self, SPEED_x, POS_j_x, DIRECTION_S_x, DIRECTION_S_y):
+  def key_left(self, SPEED_x, POS_j_x, DIRECTION_S_x, DIRECTION_S_y):
     if POS_j_y<734:
       if pyxel.btn(pyxel.KEY_LEFT):
         SPEED_x=4
@@ -35,7 +35,7 @@ class Movement:
         DIRECTION_S_y=0
         DIRECCTION_S_x=-25
         
-  def key_left((self, SPEED_x, POS_j_x, DIRECTION_S_x, DIRECTION_S_y):
+  def key_left(self, SPEED_x, POS_j_x, DIRECTION_S_x, DIRECTION_S_y):
     if POS_j_y>18:
       if pyxel.btn(pyxel.KEY_LEFT):
         SPEED_x=-4
