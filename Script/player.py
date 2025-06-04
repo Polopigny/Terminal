@@ -50,3 +50,5 @@ class Player:
 
         if debug.debug_mode == True:
             pyxel.text(self.debug_text_x,self.debug_text_y,self.debug_text,pyxel.COLOR_WHITE)
+
+player = Player()
