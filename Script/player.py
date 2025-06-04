@@ -1,6 +1,5 @@
 import pyxel
-
-debug_mode = False
+import debug
 
 class Player:
     def __init__(self):
@@ -21,7 +20,7 @@ class Player:
         self.debug_speed = 0
 
     def move(self):
-        self.speed = self.debug_speed if debug_mode else self.base_speed
+        self.speed = self.debug_speed if debug.debug_mode else self.base_speed
 
         if pyxel.btn(pyxel.KEY_UP):
             self.y -= self.speed
@@ -43,45 +42,11 @@ class Player:
 
     def update(self):
         self.move()
-        if debug_mode == True:
+        if debug.debug_mode == True:
             self.debug()
 
     def draw(self):
         pyxel.rect(self.x, self.y, self.width, self.height, self.color)
 
-        if debug_mode == True:
+        if debug.debug_mode == True:
             pyxel.text(self.debug_text_x,self.debug_text_y,self.debug_text,pyxel.COLOR_WHITE)
-
-class Debug:
-    global debug_mode
-    def __init__(self):
-        pass
-
-    def update(self):
-        global debug_mode
-        if pyxel.btnp(pyxel.KEY_O):
-            debug_mode = not debug_mode
-
-    def draw(self):
-        if debug_mode == True:
-            pyxel.text(256//2 - 30,5,"DEBUG MODE ENABLE",pyxel.COLOR_YELLOW)
-
-class App:
-    def __init__(self):
-        self.player = Player()
-        self.debug = Debug()
-
-        pyxel.init(256, 256, "Terminal V1.1", fps=30)
-        pyxel.load("../Template/2.pyxres")
-        pyxel.run(self.update, self.draw)
-
-    def update(self):
-        self.player.update()
-        self.debug.update()
-
-    def draw(self):
-        pyxel.cls(0)
-        self.player.draw()
-        self.debug.draw()
-
-App()
