@@ -12,13 +12,7 @@ class Player:
         self.width = 8
         self.height = 16
         self.color = pyxel.COLOR_RED
-        #movements
-        self.SPEED_x=SPEED_x
-        self.SPEED_y=SPEED_y
-        self.POS_j_x=POS_j_x
-        self.POS_j_y=POS_j_y
-        self.DIRECTIOn_S_x=DIRECTIOn_S_x
-        self.DIRECTIOn_S_y=DIRECTIOn_S_y
+
         #debug
         self.debug_text_x = 0 
         self.debug_text_y = 0
@@ -50,39 +44,6 @@ class Player:
         self.move()
         if debug.debug_mode == True:
             self.debug()
-
-    #methods for movements
-    def go_up(self, SPEED_y, POS_j_y, DIRECTION_S_x, DIRECTION_S_y):
-        if POS_j_y>18:
-            if pyxel.btn(pyxel.KEY_UP):
-                SPEED_y=-4
-                POS_j_y+=SPEED_y
-                DIRECTION_S_y=-25
-                DIRECCTION_S_x=0
-        
-    def go_down(self, SPEED_y, POS_j_y, DIRECTION_S_x, DIRECTION_S_y):
-        if POS_j_y<734:
-            if pyxel.btn(pyxel.KEY_DOWN):
-                SPEED_y=4
-                POS_j_y+=SPEED_y
-                DIRECTION_S_y=30
-                DIRECCTION_S_x=0
-        
-    def go_left(self, SPEED_x, POS_j_x, DIRECTION_S_x, DIRECTION_S_y):
-        if POS_j_y>18:
-            if pyxel.btn(pyxel.KEY_LEFT):
-                SPEED_x=-4
-                POS_j_x+=SPEED_x
-                DIRECTION_S_y=0
-                DIRECCTION_S_x=-25
-        
-    def go_right(self, SPEED_x, POS_j_x, DIRECTION_S_x, DIRECTION_S_y):
-        if POS_j_y<734:
-            if pyxel.btn(pyxel.KEY_RIGHT):
-                SPEED_x=4
-                POS_j_x+=SPEED_x
-                DIRECTION_S_y=0
-                DIRECCTION_S_x=30
 
     def draw(self):
         pyxel.rect(self.x, self.y, self.width, self.height, self.color)
