@@ -76,13 +76,13 @@ class Player:
                 DIRECTION_S_y=0
                 DIRECCTION_S_x=-25
         
-  def go_right(self, SPEED_x, POS_j_x, DIRECTION_S_x, DIRECTION_S_y):
-      if POS_j_y<734:
-          if pyxel.btn(pyxel.KEY_RIGHT):
-              SPEED_x=4
-              POS_j_x+=SPEED_x
-              DIRECTION_S_y=0
-              DIRECCTION_S_x=30
+    def go_right(self, SPEED_x, POS_j_x, DIRECTION_S_x, DIRECTION_S_y):
+        if POS_j_y<734:
+            if pyxel.btn(pyxel.KEY_RIGHT):
+                SPEED_x=4
+                POS_j_x+=SPEED_x
+                DIRECTION_S_y=0
+                DIRECCTION_S_x=30
 
     def draw(self):
         pyxel.rect(self.x, self.y, self.width, self.height, self.color)
