@@ -1,6 +1,8 @@
 import pyxel
 import debug
 from player import player
+from enemi import ENemi
+
 
 class App:
     def __init__(self):
@@ -11,11 +13,14 @@ class App:
     def update(self):
         player.update()
         debug.update()
+        ENemi.update()
 
     def draw(self):
         pyxel.cls(0)
         player.draw()
         debug.draw()
+        ENemi.draw()
+        pyxel.line(ENemi.x,ENemi.y,player.x,player.y,pyxel.COLOR_CYAN)
         
 
 App()
