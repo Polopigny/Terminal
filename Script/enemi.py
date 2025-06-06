@@ -14,17 +14,16 @@ class Enemi():
         self.height = 16
         self.color = pyxel.COLOR_PURPLE
 
-
     
     def move(self):
-        if self.y > player.y:
-            self.y -= self.speed
-        if self.y < player.y:
-            self.y += self.speed
-        if self.x < player.x:
-            self.x += self.speed
-        if self.x > player.x:
-            self.x -= self.speed
+        dx = player.x - self.x
+        dy = player.y - self.y
+
+        distance = (dx**2 + dy**2) ** 0.5  
+
+        if distance >= 2:
+            self.x += self.speed * dx / distance
+            self.y += self.speed * dy / distance
 
 
     def update(self):
