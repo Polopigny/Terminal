@@ -1,0 +1,25 @@
+import pyxel
+from player import player
+from debug import debug_mode
+
+
+vague_etat = "creation" # "fin" ; "en cours"
+nb_enemi = len()
+
+difficulte = 4
+
+def creation():
+    pass
+
+def en_cours():
+    pass
+
+def fini():
+    pass
+
+
+
+
+
+def update():
+    nb_enemi = len()

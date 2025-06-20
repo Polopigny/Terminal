@@ -1,8 +1,7 @@
 import pyxel
 import debug
 from player import player
-from enemi import ENemi
-
+import enemi
 
 class App:
     def __init__(self):
@@ -13,14 +12,20 @@ class App:
     def update(self):
         player.update()
         debug.update()
-        ENemi.update()
+
+        for e in enemi.list_enemi_global:
+            e.update()
+
+        enemi.update_global()
 
     def draw(self):
         pyxel.cls(0)
         player.draw()
         debug.draw()
-        ENemi.draw()
-        pyxel.line(ENemi.x,ENemi.y,player.x,player.y,pyxel.COLOR_CYAN)
+        enemi.debug_enemi()
+
+        for e in enemi.list_enemi_global:
+            e.draw()
         
 
 App()
