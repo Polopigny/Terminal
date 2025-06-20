@@ -23,13 +23,13 @@ class Player:
         self.speed = self.debug_speed if debug.debug_mode else self.base_speed
 
         if pyxel.btn(pyxel.KEY_UP):
-            self.y -= self.speed
+            self.y -= self.speed * debug.time
         if pyxel.btn(pyxel.KEY_DOWN):
-            self.y += self.speed
+            self.y += self.speed * debug.time
         if pyxel.btn(pyxel.KEY_RIGHT):
-            self.x += self.speed
+            self.x += self.speed * debug.time
         if pyxel.btn(pyxel.KEY_LEFT):
-            self.x -= self.speed
+            self.x -= self.speed * debug.time
     
     def debug(self):
         #mettre text pos(x,y) au dessus du joueur
