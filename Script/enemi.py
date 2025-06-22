@@ -30,6 +30,11 @@ class Enemi:
         self.dx_closer_enemi = 0
         self.dy_closer_enemi = 0
 
+        self.time_kill_colldown = 2
+        self.colldown_over = True
+        self.start_kill_colldown = False
+        self.time_cooldown = 0
+
     def update_distance_to_player(self):
         self.dx_player = player.x - self.x
         self.dy_player = player.y - self.y
@@ -37,9 +42,10 @@ class Enemi:
         self.distance_to_player = (self.dx_player**2 + self.dy_player**2) ** 0.5
     
     def update_player_interaction(self):
-        if self.distance_to_player <= self.dmin_player_attack:
+        if (self.distance_to_player <= self.dmin_player_attack) and self.colldown_over:
             player.life -=1
             self.color = pyxel.COLOR_CYAN
+            self.start_kill_colldown = True
             if debug.debug_mode == True:
                 print(f"PLAYER TOUCHE par enemi n°:{self.index}, vie player={player.life}")
         
@@ -78,6 +84,19 @@ class Enemi:
             if abs(self.dy_closer_enemi) < self.height:
                 self.y -= self.repulse_dy * push_force
 
+    def kill_cooldown(self,start_time):
+        if self.colldown_over == True:
+            self.time_cooldown = start_time
+            self.colldown_over = False
+
+        if self.colldown_over == False:
+            if pyxel.frame_count % 30 == 0:
+                self.time_cooldown += 1
+
+        if self.time_kill_colldown == self.time_cooldown:
+            self.colldown_over = True
+            self.start_kill_colldown = False
+
     def update(self):
         self.index = list_enemi_global.index(self)
         self.update_distance_to_player()
@@ -86,9 +105,14 @@ class Enemi:
         self.repulse()
         self.update_player_interaction()
 
+        if self.start_kill_colldown == True:
+            self.kill_cooldown(0)
+
     def draw(self):
         pyxel.rect(self.x, self.y, self.width, self.height, self.color)
         self.color = pyxel.COLOR_PURPLE
+    
+        
 
 def creation():
     global list_enemi_global,nb_enemi_global
@@ -140,3 +164,8 @@ def update_global():
     if pyxel.btnp(pyxel.KEY_SPACE) and len(list_enemi_global)>0:
         list_enemi_global.pop()
         nb_enemi_global -= 1
+
+def reset_enemi_list():
+    global list_enemi_global, nb_enemi_global
+    list_enemi_global = []
+    nb_enemi_global = 0

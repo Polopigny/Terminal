@@ -49,8 +49,28 @@ class Player:
 
     def draw(self):
         pyxel.rect(self.x, self.y, self.width, self.height, self.color)
+        pyxel.text(self.x+88, self.y - 118, f"live = {self.life}", pyxel.COLOR_GREEN)
         if debug.debug_mode:
             pyxel.text(self.debug_text_x, self.debug_text_y, self.debug_text, pyxel.COLOR_WHITE)
 
+    def reset(self):
+        self.x = 256 // 2
+        self.y = 256 // 2
 
+        self.base_speed = 1
+        self.debug_speed = 4
+        self.speed = self.base_speed
+
+        self.base_life = 3
+        self.life = self.base_life
+
+        self.width = 8
+        self.height = 16
+        self.color = pyxel.COLOR_RED
+
+        self.debug_text = ""
+        self.debug_text_x = 0
+        self.debug_text_y = 0
+
+        
 player = Player()

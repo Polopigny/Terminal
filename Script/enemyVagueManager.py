@@ -132,6 +132,26 @@ class VagueManager:
             pyxel.text(x, y, f"enemies to spawn = {self.target_enemy_count}", pyxel.COLOR_WHITE)
 
         self.draw_progress_bar()
+    
+    def reset(self):
+        self.time_seconds = 0
+        self.can_spawn = False
+
+        self.difficulty = 4
+        self.enemies_added_per_wave = 2
+
+        self.is_wave_ready = False
+        self.wave_interval = 5
+        self.wave_interval_base = 20
+        self.last_wave_time = 0
+        self.remaining_time_until_wave = 0
+        self.current_wave = 0
+
+        self.target_enemy_count = 0
+
+        self.base_enemy_count = 10
+        self.start_delay_over = False
+        self.start_delay_duration = 5
 
 
 VagueManager_var = VagueManager()

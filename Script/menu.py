@@ -47,7 +47,6 @@ class Menu:
     """
     def __init__(self):
         self.background_color = pyxel.COLOR_ORANGE
-
         self.button_play = Button(30, window_size // 4, 80, 20)
         self.button_setting = Button(30, window_size // 2, 80, 20)
         self.button_quit = Button(30, 3 * window_size // 4, 80, 20)
@@ -111,6 +110,9 @@ class Game:
             if debug.debug_mode:
                 print("joueur mort")
             menu_state = "menu"
+            VagueManager_var.reset()
+            player.reset()
+            enemi.reset_enemi_list()
 
 
 
