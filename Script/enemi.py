@@ -3,6 +3,9 @@ from player import player
 import debug
 
 list_enemi_global = []
+nb_enemi_global = 0 # attention +1 pour normal(mini boss +5) 
+                    #           +2 pour mage(mini boss + 1)
+
 
 class Enemi:
     def __init__(self,coo_x,coo_y):
@@ -16,6 +19,7 @@ class Enemi:
         self.height = 16
         self.color = pyxel.COLOR_PURPLE
 
+        self.dmin_player_attack = 3
         self.distance_to_player = 0
         self.distance_to_closer_enemi = 0
         self.id_to_closer_enemi = 0
@@ -26,11 +30,25 @@ class Enemi:
         self.dx_closer_enemi = 0
         self.dy_closer_enemi = 0
 
+        self.time_kill_colldown = 2
+        self.colldown_over = True
+        self.start_kill_colldown = False
+        self.time_cooldown = 0
+
     def update_distance_to_player(self):
         self.dx_player = player.x - self.x
         self.dy_player = player.y - self.y
 
         self.distance_to_player = (self.dx_player**2 + self.dy_player**2) ** 0.5
+    
+    def update_player_interaction(self):
+        if (self.distance_to_player <= self.dmin_player_attack) and self.colldown_over:
+            player.life -=1
+            self.color = pyxel.COLOR_CYAN
+            self.start_kill_colldown = True
+            if debug.debug_mode == True:
+                print(f"PLAYER TOUCHE par enemi n°:{self.index}, vie player={player.life}")
+        
     
     def update_closer_enemi(self):
         dx = 0
@@ -55,8 +73,8 @@ class Enemi:
     
     def move(self):
         if self.distance_to_player >= 2:
-            self.x += (self.speed * self.dx_player / self.distance_to_player) * debug.time
-            self.y += (self.speed * self.dy_player / self.distance_to_player) * debug.time
+            self.x += (self.speed * self.dx_player / self.distance_to_player) * debug.time_speed
+            self.y += (self.speed * self.dy_player / self.distance_to_player) * debug.time_speed
 
     def repulse(self):
         push_force = 0.5
@@ -66,18 +84,39 @@ class Enemi:
             if abs(self.dy_closer_enemi) < self.height:
                 self.y -= self.repulse_dy * push_force
 
+    def kill_cooldown(self,start_time):
+        if self.colldown_over == True:
+            self.time_cooldown = start_time
+            self.colldown_over = False
+
+        if self.colldown_over == False:
+            if pyxel.frame_count % 30 == 0:
+                self.time_cooldown += 1
+
+        if self.time_kill_colldown == self.time_cooldown:
+            self.colldown_over = True
+            self.start_kill_colldown = False
+
     def update(self):
         self.index = list_enemi_global.index(self)
         self.update_distance_to_player()
         self.move()
         self.update_closer_enemi()
         self.repulse()
+        self.update_player_interaction()
+
+        if self.start_kill_colldown == True:
+            self.kill_cooldown(0)
 
     def draw(self):
         pyxel.rect(self.x, self.y, self.width, self.height, self.color)
+        self.color = pyxel.COLOR_PURPLE
+    
+        
 
 def creation():
-
+    global list_enemi_global,nb_enemi_global
+    
     spwan_radius_protection = 50
 
     max_pos_x_spwan = 250  - 8
@@ -96,6 +135,9 @@ def creation():
         distance = abs(pyxel.sqrt((pos_e_x - player.x)**2 + (pos_e_y - player.y)**2))
 
     list_enemi_global.append(Enemi(pos_e_x, pos_e_y))
+    nb_enemi_global += 1
+    if debug.debug_mode == True:
+        print(f"nouveau enemi à x={pos_e_x}, y={pos_e_y}")
 
 def mise_jour_liste_enemi():
     for i in range(len(list_enemi_global)):
@@ -112,11 +154,18 @@ def debug_enemi():
             pyxel.text(e.x - 15, e.y - 7, f"closer e:{e.id_to_closer_enemi}", pyxel.COLOR_RED)
 
 
-        pyxel.text(10, 5, f"nb enemi:{len(list_enemi_global)}", pyxel.COLOR_YELLOW)
+        pyxel.text(player.x -118, player.y -123, f"nb enemi:{len(list_enemi_global)}", pyxel.COLOR_YELLOW)
 
 def update_global():
+    global nb_enemi_global
     mise_jour_liste_enemi()
     if pyxel.btnp(pyxel.KEY_U):
         creation()
     if pyxel.btnp(pyxel.KEY_SPACE) and len(list_enemi_global)>0:
         list_enemi_global.pop()
+        nb_enemi_global -= 1
+
+def reset_enemi_list():
+    global list_enemi_global, nb_enemi_global
+    list_enemi_global = []
+    nb_enemi_global = 0
