@@ -1,23 +1,32 @@
 import pyxel
 
-time = 1
+# Variables globales
+time_speed = 1
 debug_mode = False
+windowX = 0
+windowY = 0
 
 def update():
-    global debug_mode,time
+    """
+    Met à jour le mode debug et la vitesse du temps selon les touches.
+    """
+    global debug_mode, time_speed
+
     if pyxel.btnp(pyxel.KEY_O):
         debug_mode = not debug_mode
 
-
-    if debug_mode == True and pyxel.btnp(pyxel.KEY_P):
-        time = 0
-    elif debug_mode == True and pyxel.btnp(pyxel.KEY_L):
-        time = 0.25
-    if debug_mode == False:
-        time = 1
-    
+    if debug_mode:
+        if pyxel.btnp(pyxel.KEY_P):
+            time_speed = 0
+        elif pyxel.btnp(pyxel.KEY_L):
+            time_speed = 0.25
+    else:
+        time_speed = 1
 
 def draw():
+    """
+    Affiche les infos de debug à l'écran.
+    """
     if debug_mode:
-        pyxel.text(256//2 - 30, 5, "DEBUG MODE ENABLE", pyxel.COLOR_YELLOW)
-        pyxel.text(256//2 + 50, 5, f"time:{time}", pyxel.COLOR_YELLOW)
+        pyxel.text(windowX - 30, windowY - 123, "DEBUG MODE ENABLE", pyxel.COLOR_YELLOW)
+        pyxel.text(windowX + 50, windowY - 123, f"time_speed: {time_speed}", pyxel.COLOR_YELLOW)
