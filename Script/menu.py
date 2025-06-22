@@ -94,7 +94,7 @@ class Game:
         self.background_color = pyxel.COLOR_BLACK
 
     def update(self):
-        pyxel.camera(player.x-128,player.y-128)
+        
         global menu_state
 
         player.update()
@@ -113,6 +113,7 @@ class Game:
             VagueManager_var.reset()
             player.reset()
             enemi.reset_enemi_list()
+        pyxel.camera(player.x-128,player.y-128)
 
 
 
