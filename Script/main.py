@@ -1,6 +1,5 @@
 import pyxel
-import menu 
-
+import menu
 
 class App:
     def __init__(self):
@@ -11,7 +10,6 @@ class App:
         pyxel.load("../Template/2.pyxres")
 
         self.current_scene = menu.menu  # Scène actuelle : menu par défaut
-
         pyxel.run(self.update, self.draw)
 
     def switch_scene(self):
@@ -42,3 +40,4 @@ class App:
 
 
 App()
+

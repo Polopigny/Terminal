@@ -1,6 +1,7 @@
 import pyxel
 import debug
 import enemi
+import menu
 
 
 class VagueManager:
@@ -78,7 +79,7 @@ class VagueManager:
         Crée des ennemis tant que le quota de la vague n'est pas atteint.
         """
         if self.can_spawn:
-            while enemi.nb_enemi_global < self.target_enemy_count:
+            while menu.game.getCountEnemy() < self.target_enemy_count:
                 enemi.creation()
 
     def update_wave_timer_draw(self):

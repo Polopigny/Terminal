@@ -3,6 +3,7 @@ import debug
 from player import player
 import enemi
 from enemyVagueManager import VagueManager_var
+import score
 
 # États possibles du menu
 menu_state = "menu"  # "power up", "game", "end_game", "setting"
@@ -92,7 +93,45 @@ class Game:
     """
     def __init__(self):
         self.background_color = pyxel.COLOR_BLACK
+        self.score=score.Score()
+        self.collision=False
+        self.list_enemi = []
+        self.nb_enemi_global = 0 # attention +1 pour normal(mini boss +5) 
+                    #           +2 pour mage(mini boss + 1)
+        self.dmin_player_attack=3
 
+    def setCollisionStatus(self):
+        '''
+        Gérer le statut des collisons de l'épée et des ennemis.
+        '''
+        if (player.x==self.getEnemyList()[0][0]+self.getDMinPlayerAttack() or \
+              player.x==self.getEnemyList()[0][0]-self.getDMinPlayerAttack()) \
+            (player.y==self.getEnemyList()[0][1]+self.getDMinPlayerAttack() or \
+             player.y==self.getEnemyList()[0][1]-self.getDMinPlayerAttack()) :
+            self.collision=True
+        else:self.collision=False
+
+    def getCollisionstatus(self):
+        return self.collision
+    
+    def setListEnemy(self,enemy):
+        self.list_enemi.append(enemy)
+
+    def getListEnemy(self):
+        return self.list_enemi
+    
+    def getCountEnemy(self):
+        return len(self.list_enemi)
+    
+    def setDMinPlayerAttack(self,radius:int):
+        self.dmin_player_attack=radius
+    
+    def getDMinPlayerAttack(self):
+        return self.dmin_player_attack
+
+    def reset_enemi_list(self):
+        self.setListEnemy([])
+    
     def update(self):
         
         global menu_state
@@ -101,21 +140,25 @@ class Game:
         debug.update()
         VagueManager_var.update()
 
-        for e in enemi.list_enemi_global:
+        for e in self.getListEnemy():
             e.update()
 
-        enemi.update_global()
-
+    def update_global(self):
+        enemi.mise_jour_liste_enemi()
+        if pyxel.btnp(pyxel.KEY_U):
+            enemi.creation()
+        if pyxel.btnp(pyxel.KEY_SPACE) and self.getCountEnemy()>0 \
+            and self.getCollisionstatus():
+            self.getListEnemy().pop()
         if player.life <= 0:
             if debug.debug_mode:
                 print("joueur mort")
             menu_state = "menu"
             VagueManager_var.reset()
             player.reset()
-            enemi.reset_enemi_list()
+            self.reset_enemi_list()
         pyxel.camera(player.x-128,player.y-128)
-
-
+        self.score.getScore()
 
     def draw(self):
         pyxel.cls(self.background_color)
@@ -125,8 +168,10 @@ class Game:
         enemi.debug_enemi()
         VagueManager_var.draw()
 
-        for e in enemi.list_enemi_global:
+        for e in self.getListEnemy():
             e.draw()
+        
+        self.score.draw_local()
 
 
 # Instances uniques

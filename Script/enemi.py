@@ -1,11 +1,7 @@
 import pyxel
 from player import player
 import debug
-
-list_enemi_global = []
-nb_enemi_global = 0 # attention +1 pour normal(mini boss +5) 
-                    #           +2 pour mage(mini boss + 1)
-
+import menu
 
 class Enemi:
     def __init__(self,coo_x,coo_y):
@@ -18,8 +14,6 @@ class Enemi:
         self.width = 8
         self.height = 16
         self.color = pyxel.COLOR_PURPLE
-
-        self.dmin_player_attack = 3
         self.distance_to_player = 0
         self.distance_to_closer_enemi = 0
         self.id_to_closer_enemi = 0
@@ -40,9 +34,13 @@ class Enemi:
         self.dy_player = player.y - self.y
 
         self.distance_to_player = (self.dx_player**2 + self.dy_player**2) ** 0.5
+
+    def getUpdateDistanceToPlayer(self):
+        return self.update_distance_to_player()
+    
     
     def update_player_interaction(self):
-        if (self.distance_to_player <= self.dmin_player_attack) and self.colldown_over:
+        if (self.distance_to_player <= menu.game.getDMinPlayerAttack()) and self.colldown_over:
             player.life -=1
             self.color = pyxel.COLOR_CYAN
             self.start_kill_colldown = True
@@ -54,7 +52,7 @@ class Enemi:
         dx = 0
         dy = 0
         d_min = 99999999999
-        for e in list_enemi_global:
+        for e in menu.game.getListEnemy():
             if e.x != self.x and e.y != self.y:
                 dx = e.x - self.x
                 dy = e.y - self.y
@@ -98,7 +96,7 @@ class Enemi:
             self.start_kill_colldown = False
 
     def update(self):
-        self.index = list_enemi_global.index(self)
+        self.index = menu.game.getListEnemy().index(self)
         self.update_distance_to_player()
         self.move()
         self.update_closer_enemi()
@@ -115,8 +113,6 @@ class Enemi:
         
 
 def creation():
-    global list_enemi_global,nb_enemi_global
-    
     spwan_radius_protection = 50
 
     max_pos_x_spwan = 250  - 8
@@ -134,38 +130,22 @@ def creation():
 
         distance = abs(pyxel.sqrt((pos_e_x - player.x)**2 + (pos_e_y - player.y)**2))
 
-    list_enemi_global.append(Enemi(pos_e_x, pos_e_y))
-    nb_enemi_global += 1
+    menu.game.getListEnemy().append(Enemi(pos_e_x, pos_e_y))
     if debug.debug_mode == True:
         print(f"nouveau enemi à x={pos_e_x}, y={pos_e_y}")
 
 def mise_jour_liste_enemi():
-    for i in range(len(list_enemi_global)):
-        for ii in range(len(list_enemi_global)-1-i):
-            if list_enemi_global[ii].distance_to_player < list_enemi_global[ii+1].distance_to_player:
-                list_enemi_global[ii],list_enemi_global[ii+1]=list_enemi_global[ii+1],list_enemi_global[ii]
-
-
+    for i in range(len(menu.game.getListEnemy())):
+        for ii in range(len(menu.game.getListEnemy())-1-i):
+            if menu.game.getListEnemy()[ii].distance_to_player < menu.game.getListEnemy()[ii+1].distance_to_player:
+                menu.game.getListEnemy()[ii],menu.game.getListEnemy()[ii+1]=menu.game.getListEnemy()[ii+1],menu.game.getListEnemy()[ii]
+    
 def debug_enemi():
     if debug.debug_mode == True:
         
-        for e in list_enemi_global:
+        for e in menu.game.getListEnemy():
             pyxel.text(e.x - 7, e.y - 15, f"index:{e.index}", pyxel.COLOR_RED)
             pyxel.text(e.x - 15, e.y - 7, f"closer e:{e.id_to_closer_enemi}", pyxel.COLOR_RED)
 
 
-        pyxel.text(player.x -118, player.y -123, f"nb enemi:{len(list_enemi_global)}", pyxel.COLOR_YELLOW)
-
-def update_global():
-    global nb_enemi_global
-    mise_jour_liste_enemi()
-    if pyxel.btnp(pyxel.KEY_U):
-        creation()
-    if pyxel.btnp(pyxel.KEY_SPACE) and len(list_enemi_global)>0:
-        list_enemi_global.pop()
-        nb_enemi_global -= 1
-
-def reset_enemi_list():
-    global list_enemi_global, nb_enemi_global
-    list_enemi_global = []
-    nb_enemi_global = 0
+        pyxel.text(player.x -118, player.y -123, f"nb enemi:{len(menu.game.getListEnemy())}", pyxel.COLOR_YELLOW)
