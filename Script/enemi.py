@@ -135,17 +135,17 @@ def creation():
         print(f"nouveau enemi à x={pos_e_x}, y={pos_e_y}")
 
 def mise_jour_liste_enemi():
-    for i in range(len(menu.game.getListEnemy())):
-        for ii in range(len(menu.game.getListEnemy())-1-i):
-            if menu.game.getListEnemy()[ii].distance_to_player < menu.game.getListEnemy()[ii+1].distance_to_player:
-                menu.game.getListEnemy()[ii],menu.game.getListEnemy()[ii+1]=menu.game.getListEnemy()[ii+1],menu.game.getListEnemy()[ii]
+    for i in range(len(menu.game.getEnemyList())):
+        for ii in range(len(menu.game.getEnemyList())-1-i):
+            if menu.game.getEnemyList()[ii].distance_to_player < menu.game.getEnemyList()[ii+1].distance_to_player:
+                menu.game.getEnemyList()[ii],menu.game.getEnemyList()[ii+1]=menu.game.getEnemyList()[ii+1],menu.game.getEnemyList()[ii]
     
 def debug_enemi():
     if debug.debug_mode == True:
         
-        for e in menu.game.getListEnemy():
+        for e in menu.game.getEnemyList():
             pyxel.text(e.x - 7, e.y - 15, f"index:{e.index}", pyxel.COLOR_RED)
             pyxel.text(e.x - 15, e.y - 7, f"closer e:{e.id_to_closer_enemi}", pyxel.COLOR_RED)
 
 
-        pyxel.text(player.x -118, player.y -123, f"nb enemi:{len(menu.game.getListEnemy())}", pyxel.COLOR_YELLOW)
+        pyxel.text(player.x -118, player.y -123, f"nb enemi:{len(menu.game.getEnemyList())}", pyxel.COLOR_YELLOW)

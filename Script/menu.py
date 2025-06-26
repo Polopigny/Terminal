@@ -96,18 +96,18 @@ class Game:
         self.score=score.Score()
         self.collision=False
         self.list_enemi = []
-        self.nb_enemi = 0 # attention +1 pour normal(mini boss +5) 
-                    #           +2 pour mage(mini boss + 1)
         self.dmin_player_attack=3
 
-    def setCollisionStatus(self):
+    def evaluateCollisionStatus(self):
         '''
         Gérer le statut des collisons de l'épée et des ennemis.
         '''
-        if (player.x==self.getEnemyList()[0][0]+self.getDMinPlayerAttack() or \
-            player.x==self.getEnemyList()[0][0]-self.getDMinPlayerAttack()) and \
-            (player.y==self.getEnemyList()[0][1]+self.getDMinPlayerAttack() or \
-            player.y==self.getEnemyList()[0][1]-self.getDMinPlayerAttack()) :
+        if len(self.getEnemyList())>0 and \
+            (player.x>self.getEnemyList()[0].x+self.getDMinPlayerAttack() or \
+             player.x<self.getEnemyList()[0].x+self.getDMinPlayerAttack()
+            player.x==self.getEnemyList()[0].x-self.getDMinPlayerAttack()) and \
+            (player.y==self.getEnemyList()[0].y+self.getDMinPlayerAttack() or \
+            player.y==self.getEnemyList()[0].y-self.getDMinPlayerAttack()) :
             self.collision=True
         else: self.collision=False
 
@@ -138,12 +138,15 @@ class Game:
 
         player.update()
         debug.update()
-        VagueManager_var.update()
+        VagueManager_var.update
 
         for e in self.getEnemyList():
             e.update()
 
+        self.update_global()
+
     def update_global(self):
+        self.evaluateCollisionStatus()
         enemi.mise_jour_liste_enemi()
         if pyxel.btnp(pyxel.KEY_U):
             enemi.creation()

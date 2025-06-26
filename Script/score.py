@@ -17,7 +17,7 @@ class Score:
         '''
         Compter le nombre d'ennemis tuer.
         '''
-        if pyxel.btnp(pyxel.KEY_SPACE) and len(menu.game.getEnemyList())>0 and menu.game.setCollisionStatus():
+        if pyxel.btnp(pyxel.KEY_SPACE) and len(menu.game.getEnemyList())>0 and menu.game.getCollisionstatus():
             self.enemy_killed+=1
 
     def getCountEnemyKilled(self):
