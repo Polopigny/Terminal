@@ -96,7 +96,7 @@ class Game:
         self.score=score.Score()
         self.collision=False
         self.list_enemi = []
-        self.nb_enemi_global = 0 # attention +1 pour normal(mini boss +5) 
+        self.nb_enemi = 0 # attention +1 pour normal(mini boss +5) 
                     #           +2 pour mage(mini boss + 1)
         self.dmin_player_attack=3
 
@@ -105,19 +105,19 @@ class Game:
         Gérer le statut des collisons de l'épée et des ennemis.
         '''
         if (player.x==self.getEnemyList()[0][0]+self.getDMinPlayerAttack() or \
-              player.x==self.getEnemyList()[0][0]-self.getDMinPlayerAttack()) \
+            player.x==self.getEnemyList()[0][0]-self.getDMinPlayerAttack()) and \
             (player.y==self.getEnemyList()[0][1]+self.getDMinPlayerAttack() or \
-             player.y==self.getEnemyList()[0][1]-self.getDMinPlayerAttack()) :
+            player.y==self.getEnemyList()[0][1]-self.getDMinPlayerAttack()) :
             self.collision=True
-        else:self.collision=False
+        else: self.collision=False
 
     def getCollisionstatus(self):
         return self.collision
     
-    def setListEnemy(self,enemy):
+    def setEnemyList(self,enemy):
         self.list_enemi.append(enemy)
 
-    def getListEnemy(self):
+    def getEnemyList(self):
         return self.list_enemi
     
     def getCountEnemy(self):
@@ -130,7 +130,7 @@ class Game:
         return self.dmin_player_attack
 
     def reset_enemi_list(self):
-        self.setListEnemy([])
+        self.setEnemyList([])
     
     def update(self):
         
@@ -140,7 +140,7 @@ class Game:
         debug.update()
         VagueManager_var.update()
 
-        for e in self.getListEnemy():
+        for e in self.getEnemyList():
             e.update()
 
     def update_global(self):
@@ -149,7 +149,7 @@ class Game:
             enemi.creation()
         if pyxel.btnp(pyxel.KEY_SPACE) and self.getCountEnemy()>0 \
             and self.getCollisionstatus():
-            self.getListEnemy().pop()
+            self.getEnemyList().pop()
         if player.life <= 0:
             if debug.debug_mode:
                 print("joueur mort")
@@ -168,7 +168,7 @@ class Game:
         enemi.debug_enemi()
         VagueManager_var.draw()
 
-        for e in self.getListEnemy():
+        for e in self.getEnemyList():
             e.draw()
         
         self.score.draw_local()

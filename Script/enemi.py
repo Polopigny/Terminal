@@ -45,14 +45,14 @@ class Enemi:
             self.color = pyxel.COLOR_CYAN
             self.start_kill_colldown = True
             if debug.debug_mode == True:
-                print(f"PLAYER TOUCHE par enemi n°:{self.index}, vie player={player.life}")
+                pyxel.text(0,0, f"PLAYER TOUCHE par enemi n°:{self.index}, vie player={player.life}", pyxel.COLOR_YELLOW)
         
     
     def update_closer_enemi(self):
         dx = 0
         dy = 0
         d_min = 99999999999
-        for e in menu.game.getListEnemy():
+        for e in menu.game.getEnemyList():
             if e.x != self.x and e.y != self.y:
                 dx = e.x - self.x
                 dy = e.y - self.y
@@ -96,7 +96,7 @@ class Enemi:
             self.start_kill_colldown = False
 
     def update(self):
-        self.index = menu.game.getListEnemy().index(self)
+        self.index = menu.game.getEnemyList().index(self)
         self.update_distance_to_player()
         self.move()
         self.update_closer_enemi()
@@ -130,7 +130,7 @@ def creation():
 
         distance = abs(pyxel.sqrt((pos_e_x - player.x)**2 + (pos_e_y - player.y)**2))
 
-    menu.game.getListEnemy().append(Enemi(pos_e_x, pos_e_y))
+    menu.game.getEnemyList().append(Enemi(pos_e_x, pos_e_y))
     if debug.debug_mode == True:
         print(f"nouveau enemi à x={pos_e_x}, y={pos_e_y}")
 

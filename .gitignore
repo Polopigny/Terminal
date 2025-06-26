@@ -194,3 +194,4 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 Terminal.code-workspace
+.vscode/settings.json

@@ -40,6 +40,6 @@ class Score:
 
     def setDebugMode(self):
         if debug.debug_mode == True:
-            print("Ennemis tués : ",self.getCountEnemyKilled())
+            pyxel.text(0,0,"Ennemis tués : " + str(self.getCountEnemyKilled()), pyxel.COLOR_YELLOW)
 
     
