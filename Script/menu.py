@@ -95,33 +95,57 @@ class Game:
         self.background_color = pyxel.COLOR_BLACK
         self.score=score.Score()
         self.collision=False
-        self.list_enemi = []
+        self.list_enemy = []
         self.dmin_player_attack=3
+        self.e_is_top=False
+        self.e_is_left=False
+        self.d_enemy_2_player=9999999999
 
+    def setEnemyPosition(self):
+        '''
+        Avoir la position cardinal d'un ennemi par rapport au joueur.
+        '''
+        if player.x>self.getEnemyList()[0].x:
+            self.e_is_left=True
+        if player.x<self.getEnemyList()[0].x:
+            self.e_is_left=False
+        if player.y>self.getEnemyList()[0].y:
+            self.e_is_top=True
+        if player.y<self.getEnemyList()[0].y:
+            self.e_is_top=False
+
+    def getEnemyPosition(self):
+        return self.e_is_top,self.e_is_left
+    
+    def evaluateDistanceEnemy2Player(self):
+        if self.getEnemyPosition()[1]:
+            d_x_enemy_2_player=player.x-self.getEnemyList()[0].x
+        else : d_x_enemy_2_player=self.getEnemyList()[0].x-player.x
+        if self.getEnemyPosition()[0]:
+            d_y_enemy_2_player=self.getEnemyList()[0].y-player.y
+        else : d_y_enemy_2_player=player.y-self.getEnemyList()[0].y
+        self.d_enemy_2_player=d_x_enemy_2_player**2+d_y_enemy_2_player**2
+
+    def getDistanceEnemy2Player(self):
+        return self.d_enemy_2_player
+    
     def evaluateCollisionStatus(self):
-        '''
-        Gérer le statut des collisons de l'épée et des ennemis.
-        '''
-        if len(self.getEnemyList())>0 and \
-            (player.x>self.getEnemyList()[0].x+self.getDMinPlayerAttack() or \
-             player.x<self.getEnemyList()[0].x+self.getDMinPlayerAttack()
-            player.x==self.getEnemyList()[0].x-self.getDMinPlayerAttack()) and \
-            (player.y==self.getEnemyList()[0].y+self.getDMinPlayerAttack() or \
-            player.y==self.getEnemyList()[0].y-self.getDMinPlayerAttack()) :
+        self.evaluateDistanceEnemy2Player()
+        if self.getDistanceEnemy2Player()<=self.getDMinPlayerAttack():
             self.collision=True
-        else: self.collision=False
+        else:self.collision=False
 
     def getCollisionstatus(self):
         return self.collision
     
     def setEnemyList(self,enemy):
-        self.list_enemi.append(enemy)
+        self.list_enemy.append(enemy)
 
     def getEnemyList(self):
-        return self.list_enemi
+        return self.list_enemy
     
     def getCountEnemy(self):
-        return len(self.list_enemi)
+        return len(self.list_enemy)
     
     def setDMinPlayerAttack(self,radius:int):
         self.dmin_player_attack=radius
@@ -146,7 +170,8 @@ class Game:
         self.update_global()
 
     def update_global(self):
-        self.evaluateCollisionStatus()
+        if self.getCountEnemy()>0:
+            self.evaluateCollisionStatus()
         enemi.mise_jour_liste_enemi()
         if pyxel.btnp(pyxel.KEY_U):
             enemi.creation()
