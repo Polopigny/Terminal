@@ -49,16 +49,16 @@ class Sprites:
 
     def draw(self):
         pyxel.cls(0)  # Efface l'écran
-        pyxel.blt(Sprites._x, Sprites._y, 0, 0, 16, 16, 16,colkey=2)
-        pyxel.text(Sprites._x-15, Sprites._y+30, "Image de\nla banque 0\n8 x 8 px",pyxel.COLOR_WHITE)
-        pyxel.blt(Sprites._x+50, Sprites._y, 1, self._frame * 8, 0, 8, -8, 0)
-        pyxel.text(Sprites._x+35, Sprites._y+30, "Image de\nla banque 1\n8 x 8 px\ninv. vert",pyxel.COLOR_WHITE)
-        pyxel.blt(Sprites._x+100, Sprites._y, 1, self._frame * 8, 0, 8, 8, -0)
-        pyxel.text(Sprites._x+85, Sprites._y+30, "Image de\nla banque 1\n8 x 8 px\ninv. horiz",pyxel.COLOR_WHITE)
-        pyxel.blt(Sprites._x+150, Sprites._y, 1, self._frame * 8, 0, 8, 8, 0, rotate=45)
-        pyxel.text(Sprites._x+135, Sprites._y+30, "Image de\nla banque 1\n8 x 8 px\ntournee 45°\nsens ind.",pyxel.COLOR_WHITE)
-        pyxel.blt(Sprites._x+200, Sprites._y, 1, self._frame * 8, 0, 8, 8, 0, scale=2)
-        pyxel.text(Sprites._x+185, Sprites._y+30, "Image de\nla banque 1\n8 x 8 px\nhomotethie x2",pyxel.COLOR_WHITE)
+        pyxel.blt(Sprites._x, Sprites._y, 0, 0, 16, 16, 16,colkey = 2)
+        pyxel.text(Sprites._x-15, Sprites._y+30, "Image de\nla banque 0\nde 0x16px\n16x16px\nviolet",pyxel.COLOR_WHITE)
+        pyxel.blt(Sprites._x+50, Sprites._y, 0, 0, 32, 8, 8, colkey = 2)
+        pyxel.text(Sprites._x+35, Sprites._y+30, "Image de\nla banque 0\nde 0x32px\n8x8px\nviolet",pyxel.COLOR_WHITE)
+        pyxel.blt(Sprites._x+100, Sprites._y, 0, 0, 16, -16, 16, colkey = pyxel.COLOR_PURPLE)
+        pyxel.text(Sprites._x+85, Sprites._y+30, "Image de\nla banque 0\nde 0x16px\n16x16px\ninv. horiz.\nviolet",pyxel.COLOR_WHITE)
+        pyxel.blt(Sprites._x+150, Sprites._y, 0, 0, 16, 16, 16, colkey = 2, rotate = 45)
+        pyxel.text(Sprites._x+135, Sprites._y+30, "Image de\nla banque 0\nde 0x16px\n16x16px\ninv. horiz.\nviolet\ntournee 45°\nsens ind.",pyxel.COLOR_WHITE)
+        pyxel.blt(Sprites._x+200, Sprites._y, 0, 0, 16, 16, 16, colkey = 2, scale=2)
+        pyxel.text(Sprites._x+185, Sprites._y+30, "Image de\nla banque 0\nde 0x16px\n16x16px\ninv. horiz.\nviolet\nhomotethie x2",pyxel.COLOR_WHITE)
 
 #pyxel.blt()
 #pyxel.bltm()
