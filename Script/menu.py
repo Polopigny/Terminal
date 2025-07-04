@@ -92,6 +92,7 @@ class Game:
     """
     def __init__(self):
         self.background_color = pyxel.COLOR_BLACK
+        #pyxel.load('..\Template\2.pyxres')
 
     def update(self):
         

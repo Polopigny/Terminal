@@ -1,8 +1,7 @@
 import pyxel
 import menu 
 
-
-class App:
+class App():
     def __init__(self):
         """
         Initialise la fenêtre Pyxel, charge les ressources et démarre le jeu.
