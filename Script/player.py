@@ -1,6 +1,6 @@
 import pyxel
 import debug
-
+import enemi
 class Player:
     def __init__(self):
         self.x = 256 // 2
@@ -49,9 +49,10 @@ class Player:
 
     def draw(self):
         pyxel.rect(self.x, self.y, self.width, self.height, self.color)
-        pyxel.text(self.x+88, self.y - 118, f"live = {self.life}", pyxel.COLOR_GREEN)
+        pyxel.text(self.x+88, self.y - 118, f"lives = {self.life}", pyxel.COLOR_GREEN)
         if debug.debug_mode:
             pyxel.text(self.debug_text_x, self.debug_text_y, self.debug_text, pyxel.COLOR_WHITE)
+            pyxel.circb(self.x+self.width/2, self.y+self.height/2, 9, pyxel.COLOR_GREEN)
 
     def reset(self):
         self.x = 256 // 2
