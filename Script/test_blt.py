@@ -1,4 +1,6 @@
 import pyxel
+
+
 SIZE = 256
 class Sprites:
     _x = 20
@@ -9,7 +11,7 @@ class Sprites:
 
         # Crée une image de sprite dans la mémoire graphique de Pyxel 0
         # Equivaut à Pyxel.load("mon_fichier.pyxres", )
-        pyxel.images[0].set(
+        '''pyxel.images[1].set(
             0, 0,
             [
                 "00077000",
@@ -23,7 +25,7 @@ class Sprites:
             ]
         )
 
-        pyxel.images[0].set(
+        #pyxel.images[0].set(
             8, 0,
             [
                 "00077000",
@@ -35,7 +37,8 @@ class Sprites:
                 "00077000",
                 "00700700",
             ]
-        )
+        )'''
+        pyxel.load("../Template/2.pyxres")
 
         pyxel.run(self.update, self.draw)
 
@@ -46,16 +49,16 @@ class Sprites:
 
     def draw(self):
         pyxel.cls(0)  # Efface l'écran
-        pyxel.blt(Sprites._x, Sprites._y, 0, self._frame * 8, 0, 8, 8, 0)
+        pyxel.blt(Sprites._x, Sprites._y, 0, 0, 16, 16, 16,colkey=2)
         pyxel.text(Sprites._x-15, Sprites._y+30, "Image de\nla banque 0\n8 x 8 px",pyxel.COLOR_WHITE)
-        pyxel.blt(Sprites._x+50, Sprites._y, 0, self._frame * 8, 0, 8, -8, 0)
-        pyxel.text(Sprites._x+35, Sprites._y+30, "Image de\nla banque 0\n8 x 8 px\ninv. vert",pyxel.COLOR_WHITE)
-        pyxel.blt(Sprites._x+100, Sprites._y, 0, self._frame * 8, 0, 8, 8, -0)
-        pyxel.text(Sprites._x+85, Sprites._y+30, "Image de\nla banque 0\n8 x 8 px\ninv. horiz",pyxel.COLOR_WHITE)
-        pyxel.blt(Sprites._x+150, Sprites._y, 0, self._frame * 8, 0, 8, 8, 0, rotate=90)
-        pyxel.text(Sprites._x+135, Sprites._y+30, "Image de\nla banque 0\n8 x 8 px\ntournee 45°\nsens ind.",pyxel.COLOR_WHITE)
-        pyxel.blt(Sprites._x+200, Sprites._y, 0, self._frame * 8, 0, 8, 8, 0, scale=2)
-        pyxel.text(Sprites._x+185, Sprites._y+30, "Image de\nla banque 0\n8 x 8 px\nhomotethie x2",pyxel.COLOR_WHITE)
+        pyxel.blt(Sprites._x+50, Sprites._y, 1, self._frame * 8, 0, 8, -8, 0)
+        pyxel.text(Sprites._x+35, Sprites._y+30, "Image de\nla banque 1\n8 x 8 px\ninv. vert",pyxel.COLOR_WHITE)
+        pyxel.blt(Sprites._x+100, Sprites._y, 1, self._frame * 8, 0, 8, 8, -0)
+        pyxel.text(Sprites._x+85, Sprites._y+30, "Image de\nla banque 1\n8 x 8 px\ninv. horiz",pyxel.COLOR_WHITE)
+        pyxel.blt(Sprites._x+150, Sprites._y, 1, self._frame * 8, 0, 8, 8, 0, rotate=45)
+        pyxel.text(Sprites._x+135, Sprites._y+30, "Image de\nla banque 1\n8 x 8 px\ntournee 45°\nsens ind.",pyxel.COLOR_WHITE)
+        pyxel.blt(Sprites._x+200, Sprites._y, 1, self._frame * 8, 0, 8, 8, 0, scale=2)
+        pyxel.text(Sprites._x+185, Sprites._y+30, "Image de\nla banque 1\n8 x 8 px\nhomotethie x2",pyxel.COLOR_WHITE)
 
 #pyxel.blt()
 #pyxel.bltm()
