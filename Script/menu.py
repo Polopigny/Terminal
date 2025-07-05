@@ -91,7 +91,7 @@ class Game:
     Gère l'état principal de jeu.
     """
     def __init__(self):
-        self.background_color = pyxel.COLOR_BLACK
+        self.background_color = pyxel.COLOR_DARK_BLUE
         #pyxel.load('..\Template\2.pyxres')
 
     def update(self):
@@ -126,30 +126,6 @@ class Game:
         for e in enemi.list_enemi_global:
             e.draw()
 
-class Blt():
-    def __init__(self):
-        self.speed=player.speed
-        self.x=player.x
-        self.attitude_bltplayer=16
-        self.sens_player=1
-    
-    def attitude_blt_player(self):
-        if self.speed>0:
-            sens_player=1
-        else:sens_player=-1
-        if self.x%3==0:
-            self.attitude_bltplayer=16
-        else:self.attitude_bltplayer=48
-
-    def getAttitudeBltPlayer(self):
-        return self.attitude_bltplayer
-    
-    def getSensPlayer(self):
-        return self.sens_player
-    
-
-
 # Instances uniques
 menu = Menu()
 game = Game()
-blt = Blt()

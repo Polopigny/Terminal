@@ -22,6 +22,9 @@ class Player:
         self.debug_text_x = 0
         self.debug_text_y = 0
 
+        self.attitude_bltplayer=16
+        self.sens_player=1
+
     def move(self):
         self.speed = self.debug_speed if debug.debug_mode else self.base_speed
         if pyxel.btn(pyxel.KEY_UP) and self.y>18:
@@ -32,6 +35,12 @@ class Player:
             self.x += self.speed * debug.time_speed
         if pyxel.btn(pyxel.KEY_LEFT) and self.x>18:
             self.x -= self.speed * debug.time_speed
+        if self.x%3==0:
+            self.attitude_bltplayer=16
+        else:self.attitude_bltplayer=48
+        if self.y%3==0:
+            self.sens=1
+        else:self.sens=-1
 
     def update_debug_info(self):
         self.debug_text_x = self.x - 12
@@ -49,8 +58,8 @@ class Player:
             self.update_debug_info()
 
     def draw(self):
-        menu.blt.attitude_blt_player()
-        pyxel.blt(self.x, self.y, 0, menu.blt.getAttitudeBltPlayer(), 16, menu.blt.getSensPlayer()*16, self.height, colkey = 2)
+        self.move()
+        pyxel.blt(self.x, self.y, 0, self.attitude_bltplayer, 16, self.sens_player*16, self.height, colkey = 2)
 
         pyxel.text(self.x+88, self.y - 118, f"live = {self.life}", pyxel.COLOR_GREEN)
         if debug.debug_mode:
