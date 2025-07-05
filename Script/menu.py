@@ -1,8 +1,9 @@
 import pyxel
 import debug
-from player import player
+import player
 import enemi
 from enemyVagueManager import VagueManager_var
+import score
 
 # États possibles du menu
 menu_state = "menu"  # "power up", "game", "end_game", "setting"
@@ -92,13 +93,14 @@ class Game:
     """
     def __init__(self):
         self.background_color = pyxel.COLOR_BLACK
+        self._score = score.Score()
         #pyxel.load('..\Template\2.pyxres')
-
+        
     def update(self):
         
         global menu_state
 
-        player.update()
+        player.player.update()
         debug.update()
         VagueManager_var.update()
 
@@ -107,27 +109,35 @@ class Game:
 
         enemi.update_global()
 
-        if player.life <= 0:
+        if player.player.life <= 0:
             if debug.debug_mode:
-                print("joueur mort")
+                print("Player DIED")
             menu_state = "menu"
             VagueManager_var.reset()
-            player.reset()
+            player.player.reset()
             enemi.reset_enemi_list()
-        pyxel.camera(player.x-128,player.y-128)
+        pyxel.camera(player.player.x - 128, player.player.y-128)
+        self._score.update_score()
 
 
 
     def draw(self):
         pyxel.cls(self.background_color)
-
-        player.draw()
+        if debug.debug_mode:
+            nearest_enemy = enemi.list_enemi_global[-1].distance_to_player**0.5 if len(enemi.list_enemi_global) > 0 else "None"
+            pyxel.text(player.player.x - 118,
+                       player.player.y + 65,
+                       f"Nearest enemy: {nearest_enemy}",
+                       pyxel.COLOR_ORANGE)
+        player.player.draw()
         debug.draw()
         enemi.debug_enemi()
         VagueManager_var.draw()
 
         for e in enemi.list_enemi_global:
             e.draw()
+        
+        self._score.draw()
 
 
 # Instances uniques
