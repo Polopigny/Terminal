@@ -1,6 +1,5 @@
 import pyxel
 import debug
-import menu
 
 class Player:
     def __init__(self):
@@ -24,6 +23,8 @@ class Player:
 
         self.attitude_bltplayer=16
         self.sens_player=1
+
+        self.d_min_player_attack=10
 
     def move(self):
         self.speed = self.debug_speed if debug.debug_mode else self.base_speed
@@ -60,6 +61,10 @@ class Player:
     def draw(self):
         self.move()
         pyxel.blt(self.x, self.y, 0, self.attitude_bltplayer, 16, self.sens_player*16, self.height, colkey = 2)
+
+        if pyxel.btn(pyxel.KEY_SPACE):
+            pyxel.blt(self.x+self.d_min_player_attack, self.y+self.d_min_player_attack, 0, 0, 64, 16, 16, colkey=2)
+
 
         pyxel.text(self.x+88, self.y - 118, f"live = {self.life}", pyxel.COLOR_GREEN)
         if debug.debug_mode:

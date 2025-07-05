@@ -9,7 +9,7 @@ class App():
         pyxel.init(256, 256, title="Terminal V1.1", fps=30)
         pyxel.load("../Template/mathis_2.pyxres")
 
-        self.current_scene = menu.menu  # Scène actuelle : menu par défaut
+        self.current_scene = menu.menu  # Scène actuelle : menu par défaut 
 
         pyxel.run(self.update, self.draw)
 
