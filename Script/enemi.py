@@ -15,7 +15,7 @@ class Enemi:
         self.speed = 1
         self.base_life = 1
         self.life = 1
-        self.width = 8
+        self.width = 16
         self.height = 16
         self.color = pyxel.COLOR_PURPLE
 
@@ -109,7 +109,7 @@ class Enemi:
             self.kill_cooldown(0)
 
     def draw(self):
-        pyxel.rect(self.x, self.y, self.width, self.height, self.color)
+        pyxel.blt(self.x, self.y, 0, 64, 16, self.width, self.height, colkey = 2)
         self.color = pyxel.COLOR_PURPLE
     
         

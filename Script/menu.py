@@ -94,7 +94,8 @@ class Game:
     def __init__(self):
         self.background_color = pyxel.COLOR_BLACK
         self._score = score.Score()
-
+        #pyxel.load('..\Template\2.pyxres')
+        
     def update(self):
         
         global menu_state
