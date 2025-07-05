@@ -116,20 +116,40 @@ class Game:
             enemi.reset_enemi_list()
         pyxel.camera(player.x-128,player.y-128)
 
-
-
     def draw(self):
         pyxel.cls(self.background_color)
-
+        pyxel.bltm(0,0,0,0,0,768,768,0)
         player.draw()
-        debug.draw()
         enemi.debug_enemi()
         VagueManager_var.draw()
 
         for e in enemi.list_enemi_global:
             e.draw()
 
+class Blt():
+    def __init__(self):
+        self.speed=player.speed
+        self.x=player.x
+        self.attitude_bltplayer=16
+        self.sens_player=1
+    
+    def attitude_blt_player(self):
+        if self.speed>0:
+            sens_player=1
+        else:sens_player=-1
+        if self.x%3==0:
+            self.attitude_bltplayer=16
+        else:self.attitude_bltplayer=48
+
+    def getAttitudeBltPlayer(self):
+        return self.attitude_bltplayer
+    
+    def getSensPlayer(self):
+        return self.sens_player
+    
+
 
 # Instances uniques
 menu = Menu()
 game = Game()
+blt = Blt()
