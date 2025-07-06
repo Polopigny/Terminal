@@ -92,16 +92,10 @@ class Game:
     Gère l'état principal de jeu.
     """
     def __init__(self):
-<<<<<<< HEAD
-        self.background_color = pyxel.COLOR_DARK_BLUE
-        #pyxel.load('..\Template\2.pyxres')
-
-=======
         self.background_color = pyxel.COLOR_BLACK
         self._score = score.Score()
         #pyxel.load('..\Template\2.pyxres')
         
->>>>>>> Camille
     def update(self):
         
         global menu_state
@@ -127,10 +121,6 @@ class Game:
 
     def draw(self):
         pyxel.cls(self.background_color)
-<<<<<<< HEAD
-        pyxel.bltm(0,0,0,0,0,768,768,0)
-        player.draw()
-=======
         if debug.debug_mode:
             nearest_enemy = enemi.list_enemi_global[-1].distance_to_player**0.5 if len(enemi.list_enemi_global) > 0 else "None"
             pyxel.text(player.player.x - 118,
@@ -139,7 +129,6 @@ class Game:
                        pyxel.COLOR_ORANGE)
         player.player.draw()
         debug.draw()
->>>>>>> Camille
         enemi.debug_enemi()
         VagueManager_var.draw()
 

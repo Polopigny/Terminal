@@ -59,17 +59,7 @@ class Player:
             self.update_debug_info()
 
     def draw(self):
-<<<<<<< HEAD
-        self.move()
-        pyxel.blt(self.x, self.y, 0, self.attitude_bltplayer, 16, self.sens_player*16, self.height, colkey = 2)
-
-        if pyxel.btn(pyxel.KEY_SPACE):
-            pyxel.blt(self.x+self.d_min_player_attack, self.y+self.d_min_player_attack, 0, 0, 64, 16, 16, colkey=2)
-
-
-=======
         pyxel.blt(self.x, self.y, 0, 16, 16, self.width, self.height, colkey = 2)
->>>>>>> Camille
         pyxel.text(self.x+88, self.y - 118, f"live = {self.life}", pyxel.COLOR_GREEN)
 
         if debug.debug_mode:
