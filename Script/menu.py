@@ -92,7 +92,7 @@ class Game:
     Gère l'état principal de jeu.
     """
     def __init__(self):
-        self.background_color = pyxel.COLOR_BLACK
+        self.background_color = pyxel.COLOR_DARK_BLUE
         self._score = score.Score()
         #pyxel.load('..\Template\2.pyxres')
         
@@ -119,10 +119,9 @@ class Game:
         pyxel.camera(player.player.x - 128, player.player.y-128)
         self._score.update_score()
 
-
-
     def draw(self):
         pyxel.cls(self.background_color)
+        pyxel.bltm(0,0,0,0,0,768,768,colkey=2)
         if debug.debug_mode:
             nearest_enemy = enemi.list_enemi_global[-1].distance_to_player**0.5 if len(enemi.list_enemi_global) > 0 else "None"
             pyxel.text(player.player.x - 118,
@@ -138,7 +137,6 @@ class Game:
             e.draw()
         
         self._score.draw()
-
 
 # Instances uniques
 menu = Menu()

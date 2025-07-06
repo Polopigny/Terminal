@@ -1,6 +1,7 @@
 import pyxel
 import debug
-import enemi
+import menu
+
 class Player:
     def __init__(self):
         self.x = 256 // 2
@@ -21,16 +22,30 @@ class Player:
         self.debug_text_x = 0
         self.debug_text_y = 0
 
+        self.attitude_bltplayer=16
+        self.sens_player=1
+
+        self.sword_distance2player=15
+        self.is_right=True
+
     def move(self):
         self.speed = self.debug_speed if debug.debug_mode else self.base_speed
-        if pyxel.btn(pyxel.KEY_UP):
+        if pyxel.btn(pyxel.KEY_UP) and self.y>18:
             self.y -= self.speed * debug.time_speed
-        if pyxel.btn(pyxel.KEY_DOWN):
+        if pyxel.btn(pyxel.KEY_DOWN) and self.y<734:
             self.y += self.speed * debug.time_speed
-        if pyxel.btn(pyxel.KEY_RIGHT):
+        if pyxel.btn(pyxel.KEY_RIGHT) and self.x<734:
             self.x += self.speed * debug.time_speed
-        if pyxel.btn(pyxel.KEY_LEFT):
+            self.is_right=True
+        if pyxel.btn(pyxel.KEY_LEFT) and self.x>18:
             self.x -= self.speed * debug.time_speed
+            self.is_right=False
+        if self.x%3==0:
+            self.attitude_bltplayer=16
+        else:self.attitude_bltplayer=48
+        if self.y%3==0:
+            self.sens=1
+        else:self.sens=-1
 
     def update_debug_info(self):
         self.debug_text_x = self.x - 12
@@ -48,7 +63,16 @@ class Player:
             self.update_debug_info()
 
     def draw(self):
-        pyxel.blt(self.x, self.y, 0, 16, 16, self.width, self.height, colkey = 2)
+        self.move()
+        pyxel.blt(self.x, self.y, 0, self.attitude_bltplayer, 16, self.sens_player*16, self.height, colkey = 2)
+
+        if pyxel.btn(pyxel.KEY_SPACE):
+            if self.is_right:
+                pyxel.blt(self.x+self.sword_distance2player, self.y, 0, 0, 64, 16, 16, colkey=2)
+            else : pyxel.blt(self.x-self.sword_distance2player, self.y, 0, 0, 64, 16, 16, colkey=2)
+
+
+
         pyxel.text(self.x+88, self.y - 118, f"live = {self.life}", pyxel.COLOR_GREEN)
 
         if debug.debug_mode:
