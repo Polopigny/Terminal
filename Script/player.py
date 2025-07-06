@@ -25,8 +25,8 @@ class Player:
         self.attitude_bltplayer=16
         self.sens_player=1
 
-        self.d_min_player_attack=15
-        self.is_right=None
+        self.sword_distance2player=15
+        self.is_right=True
 
     def move(self):
         self.speed = self.debug_speed if debug.debug_mode else self.base_speed
@@ -68,8 +68,8 @@ class Player:
 
         if pyxel.btn(pyxel.KEY_SPACE):
             if self.is_right:
-                pyxel.blt(self.x+self.d_min_player_attack, self.y, 0, 0, 64, 16, 16, colkey=2)
-            else : pyxel.blt(self.x-self.d_min_player_attack, self.y, 0, 0, 64, 16, 16, colkey=2)
+                pyxel.blt(self.x+self.sword_distance2player, self.y, 0, 0, 64, 16, 16, colkey=2)
+            else : pyxel.blt(self.x-self.sword_distance2player, self.y, 0, 0, 64, 16, 16, colkey=2)
 
 
 
