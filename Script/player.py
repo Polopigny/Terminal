@@ -1,11 +1,7 @@
 import pyxel
 import debug
-<<<<<<< HEAD
-import enemi
-=======
 import menu
 
->>>>>>> parent of 906b077 (first implementation of the weapon blt (sword))
 class Player:
     def __init__(self):
         self.x = 256 // 2
