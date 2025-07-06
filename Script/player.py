@@ -1,6 +1,11 @@
 import pyxel
 import debug
+<<<<<<< HEAD
 import enemi
+=======
+import menu
+
+>>>>>>> parent of 906b077 (first implementation of the weapon blt (sword))
 class Player:
     def __init__(self):
         self.x = 256 // 2
@@ -23,8 +28,6 @@ class Player:
 
         self.attitude_bltplayer=16
         self.sens_player=1
-
-        self.d_min_player_attack=10
 
     def move(self):
         self.speed = self.debug_speed if debug.debug_mode else self.base_speed
@@ -59,7 +62,6 @@ class Player:
             self.update_debug_info()
 
     def draw(self):
-        pyxel.blt(self.x, self.y, 0, 16, 16, self.width, self.height, colkey = 2)
         pyxel.text(self.x+88, self.y - 118, f"live = {self.life}", pyxel.COLOR_GREEN)
 
         if debug.debug_mode:
