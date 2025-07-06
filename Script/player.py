@@ -24,7 +24,8 @@ class Player:
         self.attitude_bltplayer=16
         self.sens_player=1
 
-        self.d_min_player_attack=10
+        self.d_min_player_attack=15
+        self.is_right=False
 
     def move(self):
         self.speed = self.debug_speed if debug.debug_mode else self.base_speed
@@ -34,8 +35,10 @@ class Player:
             self.y += self.speed * debug.time_speed
         if pyxel.btn(pyxel.KEY_RIGHT) and self.x<734:
             self.x += self.speed * debug.time_speed
+            self.is_right=True
         if pyxel.btn(pyxel.KEY_LEFT) and self.x>18:
             self.x -= self.speed * debug.time_speed
+            self.is_right=False
         if self.x%3==0:
             self.attitude_bltplayer=16
         else:self.attitude_bltplayer=48
@@ -63,7 +66,10 @@ class Player:
         pyxel.blt(self.x, self.y, 0, self.attitude_bltplayer, 16, self.sens_player*16, self.height, colkey = 2)
 
         if pyxel.btn(pyxel.KEY_SPACE):
-            pyxel.blt(self.x+self.d_min_player_attack, self.y+self.d_min_player_attack, 0, 0, 64, 16, 16, colkey=2)
+            if self.is_right:
+                pyxel.blt(self.x+self.d_min_player_attack, self.y, 0, 0, 64, 16, 16, colkey=2)
+            else : pyxel.blt(self.x-self.d_min_player_attack, self.y, 0, 0, 64, 16, 16, colkey=2)
+
 
 
         pyxel.text(self.x+88, self.y - 118, f"live = {self.life}", pyxel.COLOR_GREEN)
