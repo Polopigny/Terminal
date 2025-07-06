@@ -25,7 +25,7 @@ class Player:
         self.sens_player=1
 
         self.d_min_player_attack=15
-        self.is_right=False
+        self.is_right=None
 
     def move(self):
         self.speed = self.debug_speed if debug.debug_mode else self.base_speed
