@@ -1,6 +1,6 @@
 import pyxel
 import debug
-
+import enemi
 class Player:
     def __init__(self):
         self.x = 256 // 2
@@ -59,6 +59,7 @@ class Player:
             self.update_debug_info()
 
     def draw(self):
+<<<<<<< HEAD
         self.move()
         pyxel.blt(self.x, self.y, 0, self.attitude_bltplayer, 16, self.sens_player*16, self.height, colkey = 2)
 
@@ -66,9 +67,14 @@ class Player:
             pyxel.blt(self.x+self.d_min_player_attack, self.y+self.d_min_player_attack, 0, 0, 64, 16, 16, colkey=2)
 
 
+=======
+        pyxel.blt(self.x, self.y, 0, 16, 16, self.width, self.height, colkey = 2)
+>>>>>>> Camille
         pyxel.text(self.x+88, self.y - 118, f"live = {self.life}", pyxel.COLOR_GREEN)
+
         if debug.debug_mode:
             pyxel.text(self.debug_text_x, self.debug_text_y, self.debug_text, pyxel.COLOR_WHITE)
+            pyxel.circb(self.x+self.width/2, self.y+self.height/2, 9, pyxel.COLOR_GREEN)
 
     def reset(self):
         self.x = 256 // 2

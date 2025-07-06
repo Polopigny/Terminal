@@ -28,5 +28,5 @@ def draw():
     Affiche les infos de debug à l'écran.
     """
     if debug_mode:
-        pyxel.text(windowX - 30, windowY - 123, "DEBUG MODE ENABLE", pyxel.COLOR_YELLOW)
-        pyxel.text(windowX + 50, windowY - 123, f"time_speed: {time_speed}", pyxel.COLOR_YELLOW)
+        pyxel.text(windowX - 30, windowY - 125, "DEBUG MODE ENABLE", pyxel.COLOR_YELLOW)
+        pyxel.text(windowX + 50, windowY - 125, f"time_speed: {time_speed}", pyxel.COLOR_YELLOW)
