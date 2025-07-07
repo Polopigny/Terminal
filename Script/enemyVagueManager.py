@@ -91,8 +91,8 @@ class VagueManager:
         """
         Affiche une barre de progression pour le compte à rebours de vague.
         """
-        x = enemi.player.x - 50
-        y = enemi.player.y - 118
+        x = enemi.player.player.x - 50
+        y = enemi.player.player.y - 118
         width = 100
         height = 7
 
@@ -122,8 +122,8 @@ class VagueManager:
         """
         Affiche les informations de débogage et la barre de vague.
         """
-        x = enemi.player.x - 118
-        y = enemi.player.y + 118
+        x = enemi.player.player.x - 118
+        y = enemi.player.player.y + 118
 
         if debug.debug_mode:
             pyxel.text(x, y - 30, f"time to next wave = {self.remaining_time_until_wave}", pyxel.COLOR_WHITE)
