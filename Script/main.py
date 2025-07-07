@@ -1,14 +1,13 @@
 import pyxel
 import menu 
 
-
-class App:
+class App():
     def __init__(self):
         """
         Initialise la fenêtre Pyxel, charge les ressources et démarre le jeu.
         """
         pyxel.init(256, 256, title="Terminal V1.1", fps=30)
-        pyxel.load("../Template/2.pyxres")
+        pyxel.load("../Template/mathis_2.pyxres")
 
         self.current_scene = menu.menu  # Scène actuelle : menu par défaut
 
