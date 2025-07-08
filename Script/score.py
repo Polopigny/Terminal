@@ -1,7 +1,5 @@
 import pyxel
-import enemi
 import debug
-import menu
 import player
 
 
@@ -42,5 +40,5 @@ class Score:
                    pyxel.COLOR_WHITE)
         if debug.debug_mode == True:
             pyxel.text(player.player.x - self.debug_pos,
-                       player.player.y - self.debug_pos - 20,
+                       player.player.y - self.debug_pos + 7,
                        f"Killed enemies: {self._killed_enemies}", pyxel.COLOR_YELLOW)   

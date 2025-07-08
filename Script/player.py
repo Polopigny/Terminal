@@ -1,6 +1,5 @@
 import pyxel
 import debug
-import menu
 
 class Player:
     def __init__(self):
@@ -30,6 +29,7 @@ class Player:
 
     def move(self):
         self.speed = self.debug_speed if debug.debug_mode else self.base_speed
+
         if pyxel.btn(pyxel.KEY_UP) and self.y>18:
             self.y -= self.speed * debug.time_speed
         if pyxel.btn(pyxel.KEY_DOWN) and self.y<734:
@@ -42,7 +42,8 @@ class Player:
             self.is_right=False
         if self.x%3==0:
             self.attitude_bltplayer=16
-        else:self.attitude_bltplayer=48
+        else:
+            self.attitude_bltplayer=48
         if self.y%3==0:
             self.sens=1
         else:self.sens=-1
@@ -73,12 +74,11 @@ class Player:
 
 
 
-        pyxel.text(self.x+88, self.y - 118, f"live = {self.life}", pyxel.COLOR_GREEN)
+        pyxel.text(self.x+88, self.y - 118, f"live = {self.life}", pyxel.COLOR_WHITE)
 
         if debug.debug_mode:
             pyxel.text(self.debug_text_x, self.debug_text_y, self.debug_text, pyxel.COLOR_WHITE)
-            pyxel.circb(self.x+self.width/2, self.y+self.height/2, 9, pyxel.COLOR_GREEN)
-
+            
     def reset(self):
         self.x = 256 // 2
         self.y = 256 // 2

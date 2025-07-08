@@ -120,7 +120,7 @@ class VagueManager:
 
     def draw(self):
         """
-        Affiche les informations de débogage et la barre de vague.
+        Affiche les informations de débug et la barre de vague.
         """
         x = enemi.player.player.x - 118
         y = enemi.player.player.y + 118

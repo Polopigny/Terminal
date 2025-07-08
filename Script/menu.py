@@ -97,7 +97,6 @@ class Game:
         #pyxel.load('..\Template\2.pyxres')
         
     def update(self):
-        
         global menu_state
 
         player.player.update()
@@ -122,12 +121,6 @@ class Game:
     def draw(self):
         pyxel.cls(self.background_color)
         pyxel.bltm(0,0,0,0,0,768,768,colkey=2)
-        if debug.debug_mode:
-            nearest_enemy = enemi.list_enemi_global[-1].distance_to_player**0.5 if len(enemi.list_enemi_global) > 0 else "None"
-            pyxel.text(player.player.x - 118,
-                       player.player.y + 65,
-                       f"Nearest enemy: {nearest_enemy}",
-                       pyxel.COLOR_ORANGE)
         player.player.draw()
         debug.draw()
         enemi.debug_enemi()
