@@ -1,6 +1,7 @@
 import pyxel
 import player
 import debug
+import menu
 
 list_enemi_global = []
 nb_enemi_global = 0 # attention +1 pour normal(mini boss +5) 
@@ -17,7 +18,10 @@ class Enemi:
         self.life = 1
         self.width = 16
         self.height = 16
-        self.color = pyxel.COLOR_PURPLE
+
+        self.tileset = 0
+        self.tileset_x = 64
+        self.tileset_y = 16
 
         self.dmin_player_attack = 3
         self.distance_to_player = 0
@@ -44,7 +48,6 @@ class Enemi:
     def update_player_interaction(self):
         if (self.distance_to_player <= self.dmin_player_attack) and self.colldown_over:
             player.player.life -=1
-            self.color = pyxel.COLOR_CYAN
             self.start_kill_colldown = True
             if debug.debug_mode == True:
                 print(f"Player HIT by enemy n°:{self.index},\nremaining life={player.player.life}")
@@ -110,19 +113,18 @@ class Enemi:
 
     def draw(self):
         pyxel.blt(self.x, self.y, 0, 64, 16, self.width, self.height, colkey = 2)
-        self.color = pyxel.COLOR_PURPLE
     
         
 
 def creation():
     global list_enemi_global,nb_enemi_global
     
-    spwan_radius_protection = 50
+    spwan_radius_protection = 150
 
-    max_pos_x_spwan = 250  - 8
-    max_pos_y_spwan = 250  - 16
-    min_pos_x_spwan = 10  + 8
-    min_pos_y_spwan = 10  + 16
+    max_pos_x_spwan = 736  - 8
+    max_pos_y_spwan = 736  - 16
+    min_pos_x_spwan = 16  + 8
+    min_pos_y_spwan = 16  + 16
 
     #trouver une position pour spwan l'enemi
     distance = 0
@@ -157,11 +159,10 @@ def debug_enemi():
         pyxel.text(player.player.x -118, player.player.y -125, f"enemies:{len(list_enemi_global)}", pyxel.COLOR_YELLOW)
 
 def update_global():
-    import menu
     global nb_enemi_global
+
     mise_jour_liste_enemi()
-    if pyxel.btnp(pyxel.KEY_U):
-        creation()
+
     if pyxel.btnp(pyxel.KEY_SPACE) and len(list_enemi_global)>0:
         list_enemi_global.pop()
         nb_enemi_global -= 1
