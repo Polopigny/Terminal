@@ -52,6 +52,12 @@ Exécutez le fichier `main.py` en cliquant sur **Run** ou avec la commande de la
 
 ---
 
+## Comment jouer:
+
+utilisez les fléches pour vous diriger et espace pour tuer les enemis
+
+---
+
 ## Merci à :
 
 * **Nuit du Code** : pour le fichier `.pyxres` — [https://www.lanuitducode.net](https://www.lanuitducode.net)
