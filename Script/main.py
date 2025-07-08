@@ -1,3 +1,10 @@
+# title: Pyxel Terminal Alpha
+# author: @Polopigny @CamMouren
+# desc: A Pyxel inspired version of Vampire Survivors
+# site: https://github.com/Polopigny/Terminal/
+# license: GPLv3
+# version: 1.0
+
 import pyxel
 import menu 
 
