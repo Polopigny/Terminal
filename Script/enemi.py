@@ -4,6 +4,7 @@ import debug
 import menu
 
 list_enemi_global = []
+list_projectile_global = []
 nb_enemi_global = 0 # attention +1 pour normal(mini boss +5) 
                     #           +2 pour mage(mini boss + 1)
 
@@ -135,11 +136,69 @@ class Enemi_mage(Enemi):
     
     def update_player_interaction(self):
         if (self.distance_to_player <= self.dmin_player_attack) and self.colldown_over:
-            #joueur tuer
+            list_projectile_global.append(Enemi_mage_projectile(self,self.x,self.y))
+            mise_jour_liste_projectile()
             self.start_kill_colldown = True
             if debug.debug_mode == True:
-                print(f"Player HIT by {self.__class__} n°:{self.index},\nremaining life={player.player.life}")
+                print(f"enemi : {self.__class__} shot projectile")
     
+class Enemi_mage_projectile:
+    def __init__(self,Enemi_mage_id,coo_x,coo_y):
+        self.x = coo_x
+        self.y = coo_y
+
+        self.speed = 3
+
+        self.index = 0
+        
+        self.tileset = 0
+        self.tileset_x = 112
+        self.tileset_y = 80
+        self.width = 16
+        self.height = 16
+
+        self.distance_to_player = 0
+
+        self.Enemi_mage_id = Enemi_mage_id
+
+        self.dx = player.player.x - self.x
+        self.dy = player.player.y - self.y
+        self.distance = (self.dx**2 + self.dy**2) ** 0.5
+
+    def move(self):
+        if self.distance_to_player >= 1:
+            self.x += (self.speed * self.dx / self.distance) * debug.time_speed
+            self.y += (self.speed * self.dy / self.distance) * debug.time_speed
+
+    def update_distance_to_player(self):
+        self.dx_player = player.player.x - self.x
+        self.dy_player = player.player.y - self.y
+
+        self.distance_to_player = (self.dx_player**2 + self.dy_player**2) ** 0.5
+    
+    def update_player_interaction(self):
+        if self.distance_to_player <= 4:
+            player.player.life -=1
+            if debug.debug_mode == True:
+                print(f"Player HIT by {self.__class__} shoot by {self.Enemi_mage_id.__class__} index :{self.Enemi_mage_id.index},\nremaining life={player.player.life}")
+                print(f"Projectile index : {self.index} going to be remove because it just touch player")
+            list_projectile_global.remove(self)
+    
+    def autodestruction(self):
+        if self.distance_to_player >= 200 and self in list_projectile_global:
+            if debug.debug_mode == True:
+                print(f"Projectile index : {self.index} going to be remove due to excessive distance to player:{self.distance_to_player}")
+            list_projectile_global.remove(self)
+       
+    def update(self):
+        self.update_distance_to_player()
+        self.update_player_interaction()
+        self.move()
+        self.autodestruction()
+
+    def draw(self):
+        pyxel.blt(self.x, self.y, self.tileset, self.tileset_x, self.tileset_y, self.width, self.height, colkey = 2)
+
 
 
 list_type_enemi = (
@@ -187,6 +246,11 @@ def mise_jour_liste_enemi():
             if list_enemi_global[ii].distance_to_player < list_enemi_global[ii+1].distance_to_player:
                 list_enemi_global[ii],list_enemi_global[ii+1]=list_enemi_global[ii+1],list_enemi_global[ii]
 
+def mise_jour_liste_projectile():
+    for i, proj in enumerate(list_projectile_global):
+        proj.index = i
+
+
 
 def debug_enemi():
     if debug.debug_mode == True:
@@ -195,8 +259,11 @@ def debug_enemi():
             pyxel.text(e.x - 7, e.y - 15, f"index:{e.index}", pyxel.COLOR_RED)
             pyxel.text(e.x - 15, e.y - 7, f"closer e:{e.id_to_closer_enemi}", pyxel.COLOR_RED)
 
+        for e in list_projectile_global:
+            pyxel.text(e.x - 7, e.y - 15, f"index:{e.index}", pyxel.COLOR_RED)
 
         pyxel.text(player.player.x -118, player.player.y -125, f"enemies:{len(list_enemi_global)}", pyxel.COLOR_YELLOW)
+        pyxel.text(player.player.x -118, player.player.y -103, f"projectiles:{len(list_projectile_global)}", pyxel.COLOR_YELLOW)
 
 def update_global():
     global nb_enemi_global
@@ -209,6 +276,7 @@ def update_global():
         menu.game._score.update_killed_enemies_count()
 
 def reset_enemi_list():
-    global list_enemi_global, nb_enemi_global
+    global list_enemi_global, nb_enemi_global, list_projectile_global
     list_enemi_global = []
+    list_projectile_global = []
     nb_enemi_global = 0

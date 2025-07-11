@@ -27,7 +27,7 @@ class VagueManager:
 
         self.base_enemy_count = 10
         self.start_delay_over = False
-        self.start_delay_duration = 5
+        self.start_delay_duration = 1
 
     def update_time(self):
         """

@@ -105,6 +105,9 @@ class Game:
 
         for e in enemi.list_enemi_global:
             e.update()
+        
+        for e in enemi.list_projectile_global:
+            e.update()
 
         enemi.update_global()
 
@@ -127,6 +130,9 @@ class Game:
         VagueManager_var.draw()
 
         for e in enemi.list_enemi_global:
+            e.draw()
+        
+        for e in enemi.list_projectile_global:
             e.draw()
         
         self._score.draw()
