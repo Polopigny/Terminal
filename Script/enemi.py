@@ -8,6 +8,9 @@ nb_enemi_global = 0 # attention +1 pour normal(mini boss +5)
                     #           +2 pour mage(mini boss + 1)
 
 
+
+#default enemi : squeletton
+poid_enemi = 10
 class Enemi:
     def __init__(self,coo_x,coo_y):
         self.x = coo_x
@@ -50,7 +53,7 @@ class Enemi:
             player.player.life -=1
             self.start_kill_colldown = True
             if debug.debug_mode == True:
-                print(f"Player HIT by enemy n°:{self.index},\nremaining life={player.player.life}")
+                print(f"Player HIT by {self.__class__} n°:{self.index},\nremaining life={player.player.life}")
         
     
     def update_closer_enemi(self):
@@ -75,7 +78,7 @@ class Enemi:
         self.distance_to_closer_enemi = d_min
     
     def move(self):
-        if self.distance_to_player >= 2:
+        if self.distance_to_player >= self.dmin_player_attack-2:
             self.x += (self.speed * self.dx_player / self.distance_to_player) * debug.time_speed
             self.y += (self.speed * self.dy_player / self.distance_to_player) * debug.time_speed
 
@@ -112,8 +115,43 @@ class Enemi:
             self.kill_cooldown(0)
 
     def draw(self):
-        pyxel.blt(self.x, self.y, 0, 64, 16, self.width, self.height, colkey = 2)
+        pyxel.blt(self.x, self.y, self.tileset, self.tileset_x, self.tileset_y, self.width, self.height, colkey = 2)
+
+poid_enemi_mage = 2
+class Enemi_mage(Enemi):
+    def __init__(self,coo_x,coo_y):
+        super().__init__(coo_x,coo_y)
+
+        self.base_speed = 0.3
+        self.base_life = 2
+
+        self.tileset = 0
+        self.tileset_x = 128
+        self.tileset_y = 16
+
+        self.dmin_player_attack = 100
+
+        self.time_kill_colldown = 5
     
+    def update_player_interaction(self):
+        if (self.distance_to_player <= self.dmin_player_attack) and self.colldown_over:
+            #joueur tuer
+            self.start_kill_colldown = True
+            if debug.debug_mode == True:
+                print(f"Player HIT by {self.__class__} n°:{self.index},\nremaining life={player.player.life}")
+    
+
+
+list_type_enemi = (
+    [Enemi] * poid_enemi +
+    [Enemi_mage] * poid_enemi_mage
+)
+
+    
+def choose_enemi():
+    x = pyxel.rndi(0,len(list_type_enemi)-1)
+
+    return list_type_enemi[x]
         
 
 def creation():
@@ -136,10 +174,12 @@ def creation():
 
         distance = abs(pyxel.sqrt((pos_e_x - player.player.x)**2 + (pos_e_y - player.player.y)**2))
 
-    list_enemi_global.append(Enemi(pos_e_x, pos_e_y))
+
+    enemi_to_spwan = choose_enemi()
+    list_enemi_global.append(enemi_to_spwan(pos_e_x,pos_e_y))
     nb_enemi_global += 1
     if debug.debug_mode == True:
-        print(f"new enemy at x={pos_e_x}, y={pos_e_y}")
+        print(f"new enemy : {enemi_to_spwan.__name__} at x={pos_e_x}, y={pos_e_y}")
 
 def mise_jour_liste_enemi():
     for i in range(len(list_enemi_global)):
