@@ -24,8 +24,20 @@ class Enemi:
         self.height = 16
 
         self.tileset = 0
-        self.tileset_x = 64
+        self.tileset_x_base = 64
+        self.tileset_x = self.tileset_x_base
         self.tileset_y = 16
+
+        self.anim = True
+        self.anim_i = 0
+        self.anim_old_time = 0
+        self.anim_speed = 5  # en frames
+        self.nb_frame_for_anim = 4
+        self.tileset_x_base = 64
+
+        self.side = 0
+
+        self.scale = pyxel.rndf(1,1.3)
 
         self.dmin_player_attack = 3
         self.distance_to_player = 0
@@ -48,6 +60,10 @@ class Enemi:
         self.dy_player = player.player.y - self.y
 
         self.distance_to_player = (self.dx_player**2 + self.dy_player**2) ** 0.5
+    
+    def update_side(self):
+        self.side = -1 if self.dx_player < 0 else 1
+
     
     def update_player_interaction(self):
         if (self.distance_to_player <= self.dmin_player_attack) and self.colldown_over:
@@ -115,8 +131,22 @@ class Enemi:
         if self.start_kill_colldown == True:
             self.kill_cooldown(0)
 
+        self.animation()
+        self.update_side()
+
+    def animation(self):
+        if self.anim == True:
+            if pyxel.frame_count >= self.anim_old_time + self.anim_speed:
+                self.tileset_x += 16
+                self.anim_old_time = pyxel.frame_count
+                self.anim_i += 1
+                if self.anim_i >= self.nb_frame_for_anim:
+                    self.anim_i = 0
+                    self.tileset_x = self.tileset_x_base
+
+
     def draw(self):
-        pyxel.blt(self.x, self.y, self.tileset, self.tileset_x, self.tileset_y, self.width, self.height, colkey = 2)
+        pyxel.blt(self.x, self.y, self.tileset, self.tileset_x, self.tileset_y, self.width * self.side, self.height, colkey = 2)
 
 poid_enemi_mage = 2
 class Enemi_mage(Enemi):
@@ -130,6 +160,8 @@ class Enemi_mage(Enemi):
         self.tileset_x = 128
         self.tileset_y = 16
 
+        self.anim = False
+
         self.dmin_player_attack = 100
 
         self.time_kill_colldown = 5
@@ -142,8 +174,11 @@ class Enemi_mage(Enemi):
             if debug.debug_mode == True:
                 print(f"enemi : {self.__class__} shot projectile")
     
+    def update_side(self):
+        self.side = 1 if self.dx_player < 0 else -1
+    
 class Enemi_mage_projectile:
-    def __init__(self,Enemi_mage_id,coo_x,coo_y):
+    def __init__(self,Enemi_mage_parent,coo_x,coo_y):
         self.x = coo_x
         self.y = coo_y
 
@@ -159,11 +194,22 @@ class Enemi_mage_projectile:
 
         self.distance_to_player = 0
 
-        self.Enemi_mage_id = Enemi_mage_id
+        self.rotation = 0
+
+        self.Enemi_mage_parent = Enemi_mage_parent
+
+        self.scale = self.Enemi_mage_parent.scale
+
+        self.nb_time_1 = 1
+        self.nb_time =0
 
         self.dx = player.player.x - self.x
         self.dy = player.player.y - self.y
         self.distance = (self.dx**2 + self.dy**2) ** 0.5
+
+        self.dx_player = 9999
+        self.dy_player = 9999
+        self.distance_to_player = 99999
 
     def move(self):
         if self.distance_to_player >= 1:
@@ -180,7 +226,7 @@ class Enemi_mage_projectile:
         if self.distance_to_player <= 4:
             player.player.life -=1
             if debug.debug_mode == True:
-                print(f"Player HIT by {self.__class__} shoot by {self.Enemi_mage_id.__class__} index :{self.Enemi_mage_id.index},\nremaining life={player.player.life}")
+                print(f"Player HIT by {self.__class__} shoot by {self.Enemi_mage_parent.__class__} index :{self.Enemi_mage_parent.index},\nremaining life={player.player.life}")
                 print(f"Projectile index : {self.index} going to be remove because it just touch player")
             list_projectile_global.remove(self)
     
@@ -189,15 +235,35 @@ class Enemi_mage_projectile:
             if debug.debug_mode == True:
                 print(f"Projectile index : {self.index} going to be remove due to excessive distance to player:{self.distance_to_player}")
             list_projectile_global.remove(self)
+
+    def update_rotation(self):
+        if self.dx_player == 0:
+            self.rotation = 90 if self.dy_player > 0 else 270
+        else:
+            self.ratio = self.dy_player / self.dx_player
+            self.rotation = 57 * self.ratio  # approx rad->deg (1 rad ≈ 57°)
+
+            if self.dx_player < 0:
+                self.rotation += 180
+            elif self.dy_player < 0:
+                self.rotation += 360
+
+        self.rotation = self.rotation % 360  # garde entre 0 et 359
+
+    def update_nb_time(self):
+        if self.nb_time <= self.nb_time_1:
+            self.update_rotation()
+            self.nb_time += 1
        
     def update(self):
+        self.update_nb_time()
         self.update_distance_to_player()
         self.update_player_interaction()
         self.move()
         self.autodestruction()
 
     def draw(self):
-        pyxel.blt(self.x, self.y, self.tileset, self.tileset_x, self.tileset_y, self.width, self.height, colkey = 2)
+        pyxel.blt(self.x, self.y, self.tileset, self.tileset_x, self.tileset_y, self.width, self.height, colkey = 2, rotate=self.rotation, scale=self.scale)
 
 
 
