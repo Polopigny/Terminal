@@ -124,7 +124,6 @@ class Game:
     def draw(self):
         pyxel.cls(self.background_color)
         pyxel.bltm(0,0,0,0,0,768,768,colkey=2)
-        player.player.draw()
         debug.draw()
         enemi.debug_enemi()
         VagueManager_var.draw()
@@ -136,6 +135,7 @@ class Game:
             e.draw()
         
         self._score.draw()
+        player.player.draw()
 
 # Instances uniques
 menu = Menu()

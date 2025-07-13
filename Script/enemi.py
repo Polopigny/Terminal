@@ -23,19 +23,29 @@ class Enemi:
         self.width = 16
         self.height = 16
 
+        self.can_move = True
+        self.can_be_kill = False
+
         self.tileset = 0
         self.tileset_x_base = 64
         self.tileset_x = self.tileset_x_base
-        self.tileset_y = 16
+        self.tileset_y_base = 16
+        self.tileset_y = self.tileset_y_base
+        self.tileset_x_kill = 96
+        self.tileset_y_kill = 32
 
-        self.anim = True
+        self.anim_mouvement = True
         self.anim_i = 0
         self.anim_old_time = 0
         self.anim_speed = 5  # en frames
         self.nb_frame_for_anim = 4
-        self.tileset_x_base = 64
+        self.nb_anim_kill = 10
+        self.anim_i_kill = 0
+        self.nb_scale_kill = 1/self.nb_anim_kill
+        self.anim_kill = False
+        self.anim_kill_speed = 4
 
-        self.side = 0
+        self.side = 1
 
         self.scale = pyxel.rndf(1,1.3)
 
@@ -66,13 +76,27 @@ class Enemi:
 
     
     def update_player_interaction(self):
+        #attack du monstre
         if (self.distance_to_player <= self.dmin_player_attack) and self.colldown_over:
             player.player.life -=1
+            player.player.anim_kill_old_time = pyxel.frame_count
+            player.player.anim_kill = True
             self.start_kill_colldown = True
             if debug.debug_mode == True:
                 print(f"Player HIT by {self.__class__} n°:{self.index},\nremaining life={player.player.life}")
         
+        #attack du joueur
+        if pyxel.btnp(pyxel.KEY_SPACE) and len(list_enemi_global)>0 and player.player.attack_range >= self.distance_to_player:
+            self.anim_kill = True
     
+    def kill_by_player(self):
+        global nb_enemi_global
+        if self.can_be_kill == True:
+                nb_enemi_global -= 1
+                menu.game._score.update_killed_enemies_count()
+                list_enemi_global.remove(self)
+            
+            
     def update_closer_enemi(self):
         dx = 0
         dy = 0
@@ -95,7 +119,7 @@ class Enemi:
         self.distance_to_closer_enemi = d_min
     
     def move(self):
-        if self.distance_to_player >= self.dmin_player_attack-2:
+        if self.distance_to_player >= self.dmin_player_attack-2 and self.can_move == True:
             self.x += (self.speed * self.dx_player / self.distance_to_player) * debug.time_speed
             self.y += (self.speed * self.dy_player / self.distance_to_player) * debug.time_speed
 
@@ -127,15 +151,17 @@ class Enemi:
         self.update_closer_enemi()
         self.repulse()
         self.update_player_interaction()
+        self.kill_by_player()
 
         if self.start_kill_colldown == True:
             self.kill_cooldown(0)
 
-        self.animation()
+        self.animation_mouvement()
+        self.animation_kill()
         self.update_side()
 
-    def animation(self):
-        if self.anim == True:
+    def animation_mouvement(self):
+        if self.anim_mouvement == True:
             if pyxel.frame_count >= self.anim_old_time + self.anim_speed:
                 self.tileset_x += 16
                 self.anim_old_time = pyxel.frame_count
@@ -143,10 +169,29 @@ class Enemi:
                 if self.anim_i >= self.nb_frame_for_anim:
                     self.anim_i = 0
                     self.tileset_x = self.tileset_x_base
+    
+    def animation_kill(self):
+        if self.anim_kill:
+            self.anim_mouvement = False
+            self.can_move = False
 
+            if self.anim_i_kill % self.anim_kill_speed == 0:
+                self.tileset_x = self.tileset_x_base
+                self.tileset_y = self.tileset_y_base
+            else:
+                self.tileset_x = self.tileset_x_kill
+                self.tileset_y = self.tileset_y_kill
 
+            self.scale = max(0.1, self.scale - self.nb_scale_kill)  # évite scale < 0
+            self.anim_i_kill += 1
+
+            if self.anim_i_kill >= self.nb_anim_kill:
+                self.can_be_kill = True
+                self.anim_kill = False
+
+        
     def draw(self):
-        pyxel.blt(self.x, self.y, self.tileset, self.tileset_x, self.tileset_y, self.width * self.side, self.height, colkey = 2)
+        pyxel.blt(self.x, self.y, self.tileset, self.tileset_x, self.tileset_y, self.width * self.side, self.height, colkey = 2, scale=self.scale)
 
 poid_enemi_mage = 2
 class Enemi_mage(Enemi):
@@ -156,24 +201,31 @@ class Enemi_mage(Enemi):
         self.base_speed = 0.3
         self.base_life = 2
 
-        self.tileset = 0
-        self.tileset_x = 128
-        self.tileset_y = 16
+        self.tileset_x_base = 128
+        self.tileset_y_base = 16
+        self.tileset_x = self.tileset_x_base
+        self.tileset_y = self.tileset_y_base
+        self.tileset_x_kill = 112
 
-        self.anim = False
+        self.anim_mouvement = False
 
         self.dmin_player_attack = 100
 
         self.time_kill_colldown = 5
     
     def update_player_interaction(self):
+        #attack du monstre
         if (self.distance_to_player <= self.dmin_player_attack) and self.colldown_over:
             list_projectile_global.append(Enemi_mage_projectile(self,self.x,self.y))
             mise_jour_liste_projectile()
             self.start_kill_colldown = True
             if debug.debug_mode == True:
                 print(f"enemi : {self.__class__} shot projectile")
-    
+
+        #attack du joueur
+        if pyxel.btnp(pyxel.KEY_SPACE) and len(list_enemi_global)>0 and player.player.attack_range >= self.distance_to_player:
+            self.anim_kill = True
+            
     def update_side(self):
         self.side = 1 if self.dx_player < 0 else -1
     
@@ -224,11 +276,13 @@ class Enemi_mage_projectile:
     
     def update_player_interaction(self):
         if self.distance_to_player <= 4:
-            player.player.life -=1
+            player.player.anim_kill_old_time = pyxel.frame_count
+            player.player.anim_kill = True
             if debug.debug_mode == True:
                 print(f"Player HIT by {self.__class__} shoot by {self.Enemi_mage_parent.__class__} index :{self.Enemi_mage_parent.index},\nremaining life={player.player.life}")
                 print(f"Projectile index : {self.index} going to be remove because it just touch player")
             list_projectile_global.remove(self)
+            player.player.life -=1
     
     def autodestruction(self):
         if self.distance_to_player >= 200 and self in list_projectile_global:
@@ -335,11 +389,6 @@ def update_global():
     global nb_enemi_global
 
     mise_jour_liste_enemi()
-
-    if pyxel.btnp(pyxel.KEY_SPACE) and len(list_enemi_global)>0:
-        list_enemi_global.pop()
-        nb_enemi_global -= 1
-        menu.game._score.update_killed_enemies_count()
 
 def reset_enemi_list():
     global list_enemi_global, nb_enemi_global, list_projectile_global
