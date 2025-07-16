@@ -42,3 +42,8 @@ class Score:
             pyxel.text(player.player.x - self.debug_pos,
                        player.player.y - self.debug_pos + 7,
                        f"Killed enemies: {self._killed_enemies}", pyxel.COLOR_YELLOW)   
+    def reset(self):
+        self._score          = 0
+        self._killed_enemies = 0
+
+score = Score()

@@ -7,6 +7,7 @@
 
 import pyxel
 import menu 
+import debug
 
 class App():
     def __init__(self):
@@ -27,10 +28,14 @@ class App():
         match menu.menu_state:
             case "menu":
                 self.current_scene = menu.menu
-                pyxel.camera()
+                pyxel.camera() 
             case "game":
                 self.current_scene = menu.game
-            # possibilité d'ajouter "setting", "end_game" plus tard
+            case "game_over":
+                self.current_scene = menu.game_over
+                pyxel.camera(self.current_scene.x,self.current_scene.y)
+            # !!!! changer aussi dans le debug !!!!
+
 
     def update(self):
         """

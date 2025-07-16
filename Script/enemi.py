@@ -1,7 +1,8 @@
 import pyxel
 import player
 import debug
-import menu
+from score import score
+import time_game
 
 list_enemi_global = []
 list_projectile_global = []
@@ -93,7 +94,7 @@ class Enemi:
         global nb_enemi_global
         if self.can_be_kill == True:
                 nb_enemi_global -= 1
-                menu.game._score.update_killed_enemies_count()
+                score.update_killed_enemies_count()
                 list_enemi_global.remove(self)
             
             
@@ -120,8 +121,8 @@ class Enemi:
     
     def move(self):
         if self.distance_to_player >= self.dmin_player_attack-2 and self.can_move == True:
-            self.x += (self.speed * self.dx_player / self.distance_to_player) * debug.time_speed
-            self.y += (self.speed * self.dy_player / self.distance_to_player) * debug.time_speed
+            self.x += (self.speed * self.dx_player / self.distance_to_player) * time_game.time_speed
+            self.y += (self.speed * self.dy_player / self.distance_to_player) * time_game.time_speed
 
     def repulse(self):
         push_force = 0.5
@@ -265,8 +266,8 @@ class Enemi_mage_projectile:
 
     def move(self):
         if self.distance_to_player >= 1:
-            self.x += (self.speed * self.dx / self.distance) * debug.time_speed
-            self.y += (self.speed * self.dy / self.distance) * debug.time_speed
+            self.x += (self.speed * self.dx / self.distance) * time_game.time_speed
+            self.y += (self.speed * self.dy / self.distance) * time_game.time_speed
 
     def update_distance_to_player(self):
         self.dx_player = player.player.x - self.x
@@ -372,7 +373,7 @@ def mise_jour_liste_projectile():
 
 
 
-def debug_enemi():
+def debug_enemi():  
     if debug.debug_mode == True:
         
         for e in list_enemi_global:

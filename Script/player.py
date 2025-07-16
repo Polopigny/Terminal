@@ -1,5 +1,6 @@
 import pyxel
 import debug
+import time_game
 
 class Player:
     def __init__(self):
@@ -43,7 +44,7 @@ class Player:
 
         self.anim_kill = False
         self.nb_scale_kill = 0.5
-        self.anim_kill_speed = 3
+        self.anim_kill_speed = 5
         self.anim_kill_old_time = 0
         self.side = 1
 
@@ -51,21 +52,21 @@ class Player:
         self.speed = self.debug_speed if debug.debug_mode else self.base_speed
 
         if pyxel.btn(pyxel.KEY_UP) and self.y>18:
-            self.y -= self.speed * debug.time_speed
+            self.y -= self.speed * time_game.time_speed
             self.anim_mouvement = True
         if pyxel.btn(pyxel.KEY_DOWN) and self.y<734:
-            self.y += self.speed * debug.time_speed
+            self.y += self.speed * time_game.time_speed
             self.anim_mouvement = True
         if pyxel.btn(pyxel.KEY_RIGHT) and self.x<734:
-            self.x += self.speed * debug.time_speed
+            self.x += self.speed * time_game.time_speed
             self.is_right=True
             self.side = 1
             self.anim_mouvement = True
         if pyxel.btn(pyxel.KEY_LEFT) and self.x>18:
-            self.x -= self.speed * debug.time_speed
+            self.x -= self.speed * time_game.time_speed
             self.is_right=False
             self.side = -1
-            self._mouvement = True
+            self.anim_mouvement = True
     
 
 
@@ -79,6 +80,7 @@ class Player:
         debug.windowY = self.y
 
     def update(self):
+        self.move()
         self.scale = 1
         self.anim_mouvement = False
         self.move()
@@ -114,7 +116,6 @@ class Player:
 
 
     def draw(self):
-        self.move()
         pyxel.blt(self.x, self.y, self.tileset, self.tileset_x, self.tileset_y, self.width * self.side, self.height, colkey = 2, scale=self.scale)
         
 
