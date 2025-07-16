@@ -35,6 +35,8 @@ class Player:
         self.tileset_y = self.tileset_y_base
         self.tileset_x_kill = 80
         self.tileset_y_kill = 32
+        self.tileset_x_life = 112
+        self.tileset_y_life = 48
 
         self.anim_mouvement = False
         self.anim_i = 0
@@ -114,19 +116,21 @@ class Player:
                 self.tileset_x = self.tileset_x_base
                 self.tileset_y = self.tileset_y_base
 
+    def draw_life(self):
+        x = 15
+        for i in range(self.life):
+            pyxel.blt(self.x + 70 + x * i, self.y - 122, self.tileset, self.tileset_x_life, self.tileset_y_life, self.width, self.height, colkey = 2, scale=1)
+
+
 
     def draw(self):
         pyxel.blt(self.x, self.y, self.tileset, self.tileset_x, self.tileset_y, self.width * self.side, self.height, colkey = 2, scale=self.scale)
         
-
+        self.draw_life()
         if pyxel.btn(pyxel.KEY_SPACE):
             if self.is_right:
                 pyxel.blt(self.x+self.sword_distance2player, self.y, 0, 0, 64, 16, 16, colkey=2)
             else : pyxel.blt(self.x-self.sword_distance2player, self.y, 0, 0, 64, 16, 16, colkey=2)
-
-
-
-        pyxel.text(self.x+88, self.y - 118, f"live = {self.life}", pyxel.COLOR_WHITE)
 
         if debug.debug_mode:
             pyxel.text(self.debug_text_x, self.debug_text_y, self.debug_text, pyxel.COLOR_WHITE)

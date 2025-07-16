@@ -11,6 +11,12 @@ nb_enemi_global = 0 # attention +1 pour normal(mini boss +5)
 
 
 
+
+
+list_enemi_kill_debug = []
+
+
+
 #default enemi : squeletton
 poid_enemi = 10
 class Enemi:
@@ -75,6 +81,14 @@ class Enemi:
     def update_side(self):
         self.side = -1 if self.dx_player < 0 else 1
 
+    def update_life(self):
+        global nb_enemi_global
+        if self.life <= 0:
+            nb_enemi_global -= 1
+            score.update_killed_enemies_count()
+            list_enemi_kill_debug.append(self)
+            list_enemi_kill_debug.append(time_game.time_game_seconds_x)
+            list_enemi_global.remove(self)
     
     def update_player_interaction(self):
         #attack du monstre
@@ -91,11 +105,8 @@ class Enemi:
             self.anim_kill = True
     
     def kill_by_player(self):
-        global nb_enemi_global
         if self.can_be_kill == True:
-                nb_enemi_global -= 1
-                score.update_killed_enemies_count()
-                list_enemi_global.remove(self)
+                self.life -= 1
             
             
     def update_closer_enemi(self):
@@ -153,6 +164,7 @@ class Enemi:
         self.repulse()
         self.update_player_interaction()
         self.kill_by_player()
+        self.update_life()
 
         if self.start_kill_colldown == True:
             self.kill_cooldown(0)
@@ -292,18 +304,8 @@ class Enemi_mage_projectile:
             list_projectile_global.remove(self)
 
     def update_rotation(self):
-        if self.dx_player == 0:
-            self.rotation = 90 if self.dy_player > 0 else 270
-        else:
-            self.ratio = self.dy_player / self.dx_player
-            self.rotation = 57 * self.ratio  # approx rad->deg (1 rad ≈ 57°)
-
-            if self.dx_player < 0:
-                self.rotation += 180
-            elif self.dy_player < 0:
-                self.rotation += 360
-
-        self.rotation = self.rotation % 360  # garde entre 0 et 359
+        angle = pyxel.atan2(self.dy_player, self.dx_player)  # angle en degrés
+        self.rotation = angle % 360
 
     def update_nb_time(self):
         if self.nb_time <= self.nb_time_1:
@@ -392,7 +394,8 @@ def update_global():
     mise_jour_liste_enemi()
 
 def reset_enemi_list():
-    global list_enemi_global, nb_enemi_global, list_projectile_global
+    global list_enemi_global, nb_enemi_global, list_projectile_global, list_enemi_kill_debug
     list_enemi_global = []
     list_projectile_global = []
     nb_enemi_global = 0
+    list_enemi_kill_debug = []
