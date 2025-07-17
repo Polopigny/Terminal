@@ -7,12 +7,13 @@ class Player:
         self.x = 256 // 2
         self.y = 256 // 2
 
-        self.base_speed = 1
+        self.base_speed = 2
         self.debug_speed = 4
         self.speed = self.base_speed
 
         self.base_life = 3
         self.life = self.base_life
+        self.invincibility = False
 
         self.width = 16
         self.height = 16
@@ -50,6 +51,8 @@ class Player:
         self.anim_kill_old_time = 0
         self.side = 1
 
+        self.hit_counter = 0
+
     def move(self):
         self.speed = self.debug_speed if debug.debug_mode else self.base_speed
 
@@ -70,7 +73,9 @@ class Player:
             self.side = -1
             self.anim_mouvement = True
     
-
+    def invincibility_update(self):
+        if self.invincibility == True:
+            self.life = self.base_life
 
     def update_debug_info(self):
         self.debug_text_x = self.x - 12
@@ -82,7 +87,7 @@ class Player:
         debug.windowY = self.y
 
     def update(self):
-        self.move()
+        self.invincibility_update()
         self.scale = 1
         self.anim_mouvement = False
         self.move()
@@ -90,7 +95,7 @@ class Player:
         if debug.debug_mode:
             self.update_debug_info()
         self.animation_mouvement()
-        self.animation_kill()
+        self.animation_kill()        
 
     def animation_mouvement(self):
         if self.anim_mouvement == True:
@@ -120,6 +125,8 @@ class Player:
         x = 15
         for i in range(self.life):
             pyxel.blt(self.x + 70 + x * i, self.y - 122, self.tileset, self.tileset_x_life, self.tileset_y_life, self.width, self.height, colkey = 2, scale=1)
+        if debug.debug_mode == True:
+            pyxel.text(self.x + 100, self.y -110, f"life:{self.life}",pyxel.COLOR_WHITE)
 
 
 

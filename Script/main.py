@@ -14,10 +14,13 @@ class App():
         """
         Initialise la fenêtre Pyxel, charge les ressources et démarre le jeu.
         """
-        pyxel.init(256, 256, title="Terminal V1.1", fps=30)
+        self.fps = 30
+
+        pyxel.init(256, 256, title="Terminal V1.1", fps=self.fps)
         pyxel.load("../Template/2.pyxres")
 
         self.current_scene = menu.menu  # Scène actuelle : menu par défaut
+        self.old_scene = self.current_scene
 
         pyxel.run(self.update, self.draw)
 
@@ -34,8 +37,23 @@ class App():
             case "game_over":
                 self.current_scene = menu.game_over
                 pyxel.camera(self.current_scene.x,self.current_scene.y)
-            # !!!! changer aussi dans le debug !!!!
-
+            case "setting":
+                self.current_scene = menu.setting
+                pyxel.camera()
+            case "debug_portal":
+                self.current_scene = menu.debug_portal
+                pyxel.camera()
+            case "sound_setting":
+                self.current_scene = menu.sound_setting
+                pyxel.camera()
+            case "control_setting":
+                self.current_scene = menu.control_setting
+    
+    def debug_main(self):
+        if self.old_scene != self.current_scene:
+            self.old_scene = self.current_scene
+            if debug.debug_mode == True:
+                print(f"scene : {self.current_scene}")
 
     def update(self):
         """
@@ -44,6 +62,9 @@ class App():
         self.switch_scene()
         pyxel.mouse(True)
         self.current_scene.update()
+        #mettre à jour fps si modif dans setting
+        self.fps = menu.fps
+        self.debug_main()
 
     def draw(self):
         """

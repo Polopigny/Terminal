@@ -56,6 +56,7 @@ class VagueManager:
         """
         Détermine combien d'ennemis doivent apparaître pour cette vague.
         """
+        self.enemies_added_per_wave = pyxel.rndi(2, 2 * self.difficulty)
         if self.is_wave_ready:
             min_enemies = self.base_enemy_count + self.enemies_added_per_wave
             max_enemies = self.base_enemy_count + self.difficulty * self.enemies_added_per_wave * self.current_wave

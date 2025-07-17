@@ -10,15 +10,12 @@ nb_enemi_global = 0 # attention +1 pour normal(mini boss +5)
                     #           +2 pour mage(mini boss + 1)
 
 
-
-
-
 list_enemi_kill_debug = []
 
-
+fps_enemi = 30
 
 #default enemi : squeletton
-poid_enemi = 10
+poid_enemi = 20
 class Enemi:
     def __init__(self,coo_x,coo_y):
         self.x = coo_x
@@ -26,7 +23,7 @@ class Enemi:
         self.base_speed = 1
         self.speed = 1
         self.base_life = 1
-        self.life = 1
+        self.life = self.base_life
         self.width = 16
         self.height = 16
 
@@ -94,6 +91,7 @@ class Enemi:
         #attack du monstre
         if (self.distance_to_player <= self.dmin_player_attack) and self.colldown_over:
             player.player.life -=1
+            player.player.hit_counter += 1
             player.player.anim_kill_old_time = pyxel.frame_count
             player.player.anim_kill = True
             self.start_kill_colldown = True
@@ -102,7 +100,10 @@ class Enemi:
         
         #attack du joueur
         if pyxel.btnp(pyxel.KEY_SPACE) and len(list_enemi_global)>0 and player.player.attack_range >= self.distance_to_player:
-            self.anim_kill = True
+            if self.life <= 1:
+                self.anim_kill = True
+            else :
+                self.life -=1
     
     def kill_by_player(self):
         if self.can_be_kill == True:
@@ -149,7 +150,7 @@ class Enemi:
             self.colldown_over = False
 
         if self.colldown_over == False:
-            if pyxel.frame_count % 30 == 0:
+            if pyxel.frame_count % fps_enemi == 0:
                 self.time_cooldown += 1
 
         if self.time_kill_colldown == self.time_cooldown:
@@ -206,13 +207,23 @@ class Enemi:
     def draw(self):
         pyxel.blt(self.x, self.y, self.tileset, self.tileset_x, self.tileset_y, self.width * self.side, self.height, colkey = 2, scale=self.scale)
 
-poid_enemi_mage = 2
+poid_enemi_mini = 1
+class Enemi_mini(Enemi):
+    def __init__(self, coo_x, coo_y):
+        super().__init__(coo_x, coo_y)
+        self.scale = pyxel.rndf(0.4,0.8)
+        self.speed = 2.2
+        self.base_life = 1
+        self.life = self.base_life 
+
+poid_enemi_mage = 5
 class Enemi_mage(Enemi):
     def __init__(self,coo_x,coo_y):
         super().__init__(coo_x,coo_y)
 
         self.base_speed = 0.3
         self.base_life = 2
+        self.life = self.base_life 
 
         self.tileset_x_base = 128
         self.tileset_y_base = 16
@@ -237,22 +248,60 @@ class Enemi_mage(Enemi):
 
         #attack du joueur
         if pyxel.btnp(pyxel.KEY_SPACE) and len(list_enemi_global)>0 and player.player.attack_range >= self.distance_to_player:
-            self.anim_kill = True
+            if self.life <= 1:
+                self.anim_kill = True
+            else :
+                self.life -=1
             
     def update_side(self):
         self.side = 1 if self.dx_player < 0 else -1
-    
+
+poid_enemi_mage_mini = 2
+class Enemi_mage_mini(Enemi_mage):
+    def __init__(self, coo_x, coo_y):
+        super().__init__(coo_x, coo_y)
+        self.base_life = 1
+        self.life = self.base_life 
+        self.speed = 0.6
+        self.time_kill_colldown = 3
+        self.scale = pyxel.rndf(0.4,0.8)
+
+poid_enemi_mage_pro = 1
+class Enemi_mage_pro(Enemi_mage):
+    def __init__(self, coo_x, coo_y):
+        super().__init__(coo_x, coo_y)
+        self.base_speed = 0.2
+        self.scale = pyxel.rndf(1.4,1.6)
+        self.base_life = 4
+        self.life = self.base_life 
+        
+    def update_player_interaction(self):
+        #attack du monstre
+        if (self.distance_to_player <= self.dmin_player_attack) and self.colldown_over:
+
+            list_projectile_global.append(Enemi_mage_projectile(self,self.x,self.y))
+            list_projectile_global.append(Enemi_mage_projectile(self,self.x,self.y,speed=2))
+
+            mise_jour_liste_projectile()
+            self.start_kill_colldown = True
+            if debug.debug_mode == True:
+                print(f"enemi : {self.__class__} shot projectile")
+
+        #attack du joueur
+        if pyxel.btnp(pyxel.KEY_SPACE) and len(list_enemi_global)>0 and player.player.attack_range >= self.distance_to_player:
+            self.anim_kill = True
+
 class Enemi_mage_projectile:
-    def __init__(self,Enemi_mage_parent,coo_x,coo_y):
+    def __init__(self,Enemi_mage_parent,coo_x,coo_y,speed=3):
         self.x = coo_x
         self.y = coo_y
 
-        self.speed = 3
+        self.speed = speed
 
         self.index = 0
         
         self.tileset = 0
-        self.tileset_x = 112
+        self.tileset_x = 16 
         self.tileset_y = 80
         self.width = 16
         self.height = 16
@@ -294,8 +343,9 @@ class Enemi_mage_projectile:
             if debug.debug_mode == True:
                 print(f"Player HIT by {self.__class__} shoot by {self.Enemi_mage_parent.__class__} index :{self.Enemi_mage_parent.index},\nremaining life={player.player.life}")
                 print(f"Projectile index : {self.index} going to be remove because it just touch player")
-            list_projectile_global.remove(self)
             player.player.life -=1
+            player.player.hit_counter += 1
+            list_projectile_global.remove(self)
     
     def autodestruction(self):
         if self.distance_to_player >= 200 and self in list_projectile_global:
@@ -326,7 +376,10 @@ class Enemi_mage_projectile:
 
 list_type_enemi = (
     [Enemi] * poid_enemi +
-    [Enemi_mage] * poid_enemi_mage
+    [Enemi_mage] * poid_enemi_mage+
+    [Enemi_mage_pro] * poid_enemi_mage_pro+
+    [Enemi_mini] * poid_enemi_mini+
+    [Enemi_mage_mini] * poid_enemi_mage_mini
 )
 
     
