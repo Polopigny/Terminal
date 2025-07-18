@@ -1,3 +1,11 @@
+#truc
+Build/
+/Build/
+/Test/
+Test/
+/test/
+test/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 /__pycache__/

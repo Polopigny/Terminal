@@ -7,16 +7,21 @@
 
 import pyxel
 import menu 
+import debug
+import anti_cheat
 
 class App():
     def __init__(self):
         """
         Initialise la fenêtre Pyxel, charge les ressources et démarre le jeu.
         """
-        pyxel.init(256, 256, title="Terminal V1.1", fps=30)
+        self.fps = 30
+
+        pyxel.init(256, 256, title="Terminal V1.1", fps=self.fps)
         pyxel.load("../Template/2.pyxres")
 
         self.current_scene = menu.menu  # Scène actuelle : menu par défaut
+        self.old_scene = self.current_scene
 
         pyxel.run(self.update, self.draw)
 
@@ -27,10 +32,37 @@ class App():
         match menu.menu_state:
             case "menu":
                 self.current_scene = menu.menu
-                pyxel.camera()
+                anti_cheat.scene = "menu"
+                pyxel.camera() 
             case "game":
                 self.current_scene = menu.game
-            # possibilité d'ajouter "setting", "end_game" plus tard
+                anti_cheat.scene = "game"
+            case "game_over":
+                self.current_scene = menu.game_over
+                anti_cheat.scene = "game_over"
+                pyxel.camera(self.current_scene.x,self.current_scene.y)
+            case "setting":
+                self.current_scene = menu.setting
+                anti_cheat.scene = "setting"
+                pyxel.camera()
+            case "debug_portal":
+                self.current_scene = menu.debug_portal
+                anti_cheat.scene = "debug_portal"
+                pyxel.camera()
+            case "sound_setting":
+                self.current_scene = menu.sound_setting
+                anti_cheat.scene = "sound_setting"
+                pyxel.camera()
+            case "control_setting":
+                anti_cheat.scene = "control_setting"
+                self.current_scene = menu.control_setting 
+                pyxel.camera()
+    
+    def debug_main(self):
+        if self.old_scene != self.current_scene:
+            self.old_scene = self.current_scene
+            if debug.debug_mode == True:
+                print(f"scene : {self.current_scene}")
 
     def update(self):
         """
@@ -39,6 +71,9 @@ class App():
         self.switch_scene()
         pyxel.mouse(True)
         self.current_scene.update()
+        #mettre à jour fps si modif dans setting
+        self.fps = menu.fps
+        self.debug_main()
 
     def draw(self):
         """

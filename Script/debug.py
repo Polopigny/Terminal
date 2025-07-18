@@ -6,7 +6,9 @@ debug_mode = False
 windowX = 0
 windowY = 0
 
+o = ""
 def update():
+    global o
     """
     Met à jour le mode debug et la vitesse du temps selon les touches.
     """
@@ -20,6 +22,9 @@ def update():
             time_speed = 0
         elif pyxel.btnp(pyxel.KEY_L):
             time_speed = 0.25
+        if pyxel.btnp(pyxel.KEY_M):
+            o = "a"
+            
     else:
         time_speed = 1
 
@@ -30,3 +35,4 @@ def draw():
     if debug_mode:
         pyxel.text(windowX - 30, windowY - 125, "DEBUG MODE ENABLE", pyxel.COLOR_YELLOW)
         pyxel.text(windowX + 50, windowY - 125, f"time_speed: {time_speed}", pyxel.COLOR_YELLOW)
+        
