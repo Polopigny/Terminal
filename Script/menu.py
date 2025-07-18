@@ -238,7 +238,7 @@ class Setting:
         self.background_color = pyxel.COLOR_ORANGE
 
         self.difficulte_slider = Slider(window_size/6,30,100,10,start_nb=4,name="difficulte")
-        self.fps_slider = Slider(window_size/6,150,200,10,start_nb=15,name="fps")        
+        self.fps_slider = Slider(window_size/6,160,200,10,start_nb=15,name="fps")        
         self.vie_joueur_slider = Slider(window_size/6,60,100,10,start_nb=3,name="vie")
 
         self.button_back = Button(window_size//2 - 45,230,100,15,name="back")
@@ -313,8 +313,8 @@ class Setting:
         #slider
         self.vie_joueur_slider.draw()
         #titre
-        pyxel.text(window_size/6, 137, "FPS", pyxel.COLOR_WHITE)
-        pyxel.text(window_size/6 + 10, 137, "Alors pour que ca marche faut attendre la prochaine mise à jour", pyxel.COLOR_WHITE)
+        pyxel.text(window_size/6, 140, "FPS", pyxel.COLOR_WHITE)
+        pyxel.text(window_size/6 - 40, 150, "Alors pour que ca marche faut attendre la prochaine mise à jour", pyxel.COLOR_WHITE)
         #slider
         self.fps_slider.draw()
     
@@ -322,7 +322,7 @@ class Setting:
         self.background_color = pyxel.COLOR_ORANGE
 
         self.difficulte_slider = Slider(window_size/6,30,100,10,start_nb=4,name="difficulte")
-        self.fps_slider = Slider(window_size/6,150,200,10,start_nb=15,name="fps")        
+        self.fps_slider = Slider(window_size/6,160,200,10,start_nb=15,name="fps")        
         self.vie_joueur_slider = Slider(window_size/6,60,100,10,start_nb=3,name="vie")
 
         self.button_back = Button(window_size//2 - 45,230,100,15,name="back")
@@ -387,7 +387,7 @@ class Sound_setting:
     
     def draw(self):
         pyxel.cls(self.background_color)
-        pyxel.text(window_size/2,window_size/2 - 30,"déso, flemme de faire à attendre prochaine maj", pyxel.COLOR_WHITE)
+        pyxel.text(window_size/2 - 70,window_size/2 - 30,"déso, flemme de faire à attendre prochaine maj", pyxel.COLOR_WHITE)
         #bouton back 
         self.button_back.draw()
         pyxel.text(window_size//2,235,"BACK",pyxel.COLOR_WHITE)
@@ -409,7 +409,7 @@ class Control_setting:
     
     def draw(self):
         pyxel.cls(self.background_color)
-        pyxel.text(window_size/2,window_size/2 - 30,"déso, flemme de faire à attendre prochaine maj", pyxel.COLOR_WHITE)
+        pyxel.text(window_size/2  - 70,window_size/2 - 30,"déso, flemme de faire à attendre prochaine maj", pyxel.COLOR_WHITE)
         #bouton back 
         self.button_back.draw()
         pyxel.text(window_size//2,235,"BACK",pyxel.COLOR_WHITE)

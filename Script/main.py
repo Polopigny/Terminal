@@ -47,7 +47,7 @@ class App():
                 self.current_scene = menu.sound_setting
                 pyxel.camera()
             case "control_setting":
-                self.current_scene = menu.control_setting
+                self.current_scene = menu.control_setting 
     
     def debug_main(self):
         if self.old_scene != self.current_scene:

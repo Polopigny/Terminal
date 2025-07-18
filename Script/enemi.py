@@ -445,6 +445,7 @@ def update_global():
     global nb_enemi_global
 
     mise_jour_liste_enemi()
+    update_anim_kill_for_player()
 
 def reset_enemi_list():
     global list_enemi_global, nb_enemi_global, list_projectile_global, list_enemi_kill_debug
@@ -452,3 +453,8 @@ def reset_enemi_list():
     list_projectile_global = []
     nb_enemi_global = 0
     list_enemi_kill_debug = []
+
+def update_anim_kill_for_player():
+    if len(list_enemi_global) > 0:
+        player.player.dx_enemi = list_enemi_global[len(list_enemi_global)-1].x - player.player.x
+        player.player.dy_enemi = list_enemi_global[len(list_enemi_global)-1].y - player.player.y
