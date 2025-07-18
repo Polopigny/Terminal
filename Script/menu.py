@@ -5,6 +5,7 @@ import enemi
 from enemyVagueManager import VagueManager_var
 from score import score
 import time_game
+import anti_cheat
 # États possibles du menu
 menu_state = "menu"  # "power up", "game", "game_over", "setting", "debug_portal"
 window_size = 256
@@ -126,6 +127,8 @@ class Menu:
         def update(self):
             self.buttons()
             time_game.update()
+            anti_cheat.cheat_update()
+            debug.update()
 
         def draw(self):
             pyxel.cls(self.background_color)
@@ -158,6 +161,7 @@ class Debug_portal:
         global menu_state
         debug.update()
         time_game.update()
+        anti_cheat.cheat_update()
         #bouton back
         self.button_back.update()
         if self.button_back.is_click:
@@ -178,7 +182,7 @@ class Debug_portal:
         #bouton debug
         self.button_debug.update()
         if self.button_debug.is_click:
-            debug.debug_mode = True
+            debug.debug_mode = not debug.debug_mode
         #bouton invincible
         self.button_invacibility.update()
         if self.button_invacibility.is_click:
@@ -196,6 +200,7 @@ class Debug_portal:
         self.button_attente_debut_vague.update()
         if self.button_attente_debut_vague.is_click:
             VagueManager_var.start_delay_over = not VagueManager_var.start_delay_over
+            VagueManager_var.is_wave_ready = not VagueManager_var.is_wave_ready
         #Slider vitesse joueur
         self.slider_vitesse_joueur.update()
         player.player.speed = self.slider_vitesse_joueur.nb_slider
@@ -216,7 +221,7 @@ class Debug_portal:
         pyxel.text(window_size//4,105,"GAME OVER",pyxel.COLOR_WHITE)
         #bouton game over
         self.button_debug.draw()
-        pyxel.text(window_size//4,125,"DEBUG TOGGLE",pyxel.COLOR_WHITE)
+        pyxel.text(window_size//4 - 40,125,f"DEBUG TOGGLE:{debug.debug_mode}",pyxel.COLOR_WHITE)
         #bouton invincible
         self.button_invacibility.draw()
         pyxel.text(window_size//4 - 30,145,f"INVICIBILITY :{player.player.invincibility}",pyxel.COLOR_WHITE)
@@ -265,6 +270,7 @@ class Setting:
             player.player.reset()
             score.reset()
             enemi.reset_enemi_list()
+            anti_cheat.reset()
             self.reset_setting()
         
         self.button_color_pallette.update()
@@ -363,6 +369,9 @@ class Setting:
 
 
     def update(self):
+        time_game.update()
+        anti_cheat.cheat_update()
+        debug.update()
         #paramètre
         self.buttons_update()
         self.sliders_update()
@@ -384,6 +393,9 @@ class Sound_setting:
 
     def update(self):
         self.button_back_update()
+        anti_cheat.cheat_update()
+        debug.update()
+        time_game.update()
     
     def draw(self):
         pyxel.cls(self.background_color)
@@ -406,6 +418,9 @@ class Control_setting:
 
     def update(self):
         self.button_back_update()
+        anti_cheat.cheat_update()
+        debug.update()
+        time_game.update()
     
     def draw(self):
         pyxel.cls(self.background_color)
@@ -427,6 +442,7 @@ class Game:
             global menu_state, game_over
             time_game.update()
             time_game.update_time_game()
+            anti_cheat.cheat_update()
             player.player.update()
             debug.update()
             VagueManager_var.update()
@@ -517,6 +533,7 @@ class Game_over:
             score.reset()
             time_game.reset_game_time()
             pyxel.camera(player.player.x - 128, player.player.y-128)
+            anti_cheat.reset()
         
         
         def buttons_update(self):
@@ -557,6 +574,7 @@ class Game_over:
             pyxel.text(self.x + 30,self.y + 85, f"difficulty = {VagueManager_var.difficulty}", pyxel.COLOR_WHITE)
             pyxel.text(self.x + 30,self.y + 92, f"nb enemy in game = {len(enemi.list_enemi_global)}", pyxel.COLOR_WHITE)
             pyxel.text(self.x + 30,self.y + 99, f"hit taken = {player.player.hit_counter}", pyxel.COLOR_WHITE)
+            pyxel.text(self.x + 30,self.y + 106, f"Cheat = {anti_cheat.cheat}", pyxel.COLOR_RED)
 
         
         def draw(self):
@@ -570,6 +588,7 @@ class Game_over:
         def update(self):
             time_game.update()
             debug.update()
+            anti_cheat.cheat_update()
             self.buttons_update()
             
 

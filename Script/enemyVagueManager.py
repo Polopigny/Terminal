@@ -20,7 +20,8 @@ class VagueManager:
         self.wave_interval_base = 20
         self.last_wave_time = 0
         self.remaining_time_until_wave = 0
-        self.current_wave = 1
+        self.current_wave_base = 1
+        self.current_wave = self.current_wave_base
 
         self.target_enemy_count = 0
 
@@ -133,7 +134,8 @@ class VagueManager:
         self.wave_interval_base = 20
         self.last_wave_time = 0
         self.remaining_time_until_wave = 0
-        self.current_wave = 0
+        self.current_wave_base = 1
+        self.current_wave = self.current_wave_base
 
         self.target_enemy_count = 0
 

@@ -8,6 +8,7 @@
 import pyxel
 import menu 
 import debug
+import anti_cheat
 
 class App():
     def __init__(self):
@@ -31,23 +32,31 @@ class App():
         match menu.menu_state:
             case "menu":
                 self.current_scene = menu.menu
+                anti_cheat.scene = "menu"
                 pyxel.camera() 
             case "game":
                 self.current_scene = menu.game
+                anti_cheat.scene = "game"
             case "game_over":
                 self.current_scene = menu.game_over
+                anti_cheat.scene = "game_over"
                 pyxel.camera(self.current_scene.x,self.current_scene.y)
             case "setting":
                 self.current_scene = menu.setting
+                anti_cheat.scene = "setting"
                 pyxel.camera()
             case "debug_portal":
                 self.current_scene = menu.debug_portal
+                anti_cheat.scene = "debug_portal"
                 pyxel.camera()
             case "sound_setting":
                 self.current_scene = menu.sound_setting
+                anti_cheat.scene = "sound_setting"
                 pyxel.camera()
             case "control_setting":
+                anti_cheat.scene = "control_setting"
                 self.current_scene = menu.control_setting 
+                pyxel.camera()
     
     def debug_main(self):
         if self.old_scene != self.current_scene:
