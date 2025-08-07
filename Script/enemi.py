@@ -6,9 +6,7 @@ import time_game
 
 list_enemi_global = []
 list_projectile_global = []
-nb_enemi_global = 0 # attention +1 pour normal(mini boss +5) 
-                    #           +2 pour mage(mini boss + 1)
-
+nb_enemi_global = 0 
 
 list_enemi_kill_debug = []
 
@@ -24,6 +22,7 @@ class Enemi:
         self.speed = 1
         self.base_life = 1
         self.life = self.base_life
+        self.point = 1
         self.width = 16
         self.height = 16
 
@@ -82,9 +81,9 @@ class Enemi:
         global nb_enemi_global
         if self.life <= 0:
             nb_enemi_global -= 1
+             = time_game.time_game_seconds_x
             score.update_killed_enemies_count()
             list_enemi_kill_debug.append(self)
-            list_enemi_kill_debug.append(time_game.time_game_seconds_x)
             list_enemi_global.remove(self)
     
     def update_player_interaction(self):
@@ -207,7 +206,7 @@ class Enemi:
     def draw(self):
         pyxel.blt(self.x, self.y, self.tileset, self.tileset_x, self.tileset_y, self.width * self.side, self.height, colkey = 2, scale=self.scale)
 
-poid_enemi_mini = 1
+poid_enemi_mini = 3
 class Enemi_mini(Enemi):
     def __init__(self, coo_x, coo_y):
         super().__init__(coo_x, coo_y)
@@ -215,6 +214,17 @@ class Enemi_mini(Enemi):
         self.speed = 2.2
         self.base_life = 1
         self.life = self.base_life 
+        self.point = 0.5
+
+poid_Enemi_geant = 2
+class Enemi_geant(Enemi):
+    def __init__(self, coo_x, coo_y):
+        super().__init__(coo_x, coo_y)
+        self.scale = pyxel.rndf(1.4,1.8)
+        self.speed = 0.8
+        self.base_life = 8
+        self.life = self.base_life 
+        self.point = 5
 
 poid_enemi_mage = 5
 class Enemi_mage(Enemi):
@@ -223,6 +233,7 @@ class Enemi_mage(Enemi):
 
         self.base_speed = 0.3
         self.base_life = 2
+        self.point = 2
         self.life = self.base_life 
 
         self.tileset_x_base = 128
@@ -261,6 +272,7 @@ class Enemi_mage_mini(Enemi_mage):
     def __init__(self, coo_x, coo_y):
         super().__init__(coo_x, coo_y)
         self.base_life = 1
+        self.point = 1
         self.life = self.base_life 
         self.speed = 0.6
         self.time_kill_colldown = 3
@@ -273,6 +285,7 @@ class Enemi_mage_pro(Enemi_mage):
         self.base_speed = 0.2
         self.scale = pyxel.rndf(1.4,1.6)
         self.base_life = 4
+        self.point = 4
         self.life = self.base_life 
         
     def update_player_interaction(self):
