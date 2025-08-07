@@ -1,6 +1,8 @@
 #truc
 Build/
 /Build/
+build/
+/build/
 /Test/
 Test/
 /test/
