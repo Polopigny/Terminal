@@ -8,15 +8,16 @@ list_enemi_global = []
 list_projectile_global = []
 nb_enemi_global = 0 # attention +1 pour normal(mini boss +5) 
                     #           +2 pour mage(mini boss + 1)
-
+list_type_enemi=[]
 
 list_enemi_kill_debug = []
 
 fps_enemi = 30
 
 #default enemi : squeletton
-poid_enemi = 20
 class Enemi:
+    score = 10
+    poids = 20
     def __init__(self,coo_x,coo_y):
         self.x = coo_x
         self.y = coo_y
@@ -82,7 +83,7 @@ class Enemi:
         global nb_enemi_global
         if self.life <= 0:
             nb_enemi_global -= 1
-            score.update_killed_enemies_count()
+            score.update_score(self.__class__.score)
             list_enemi_kill_debug.append(self)
             list_enemi_kill_debug.append(time_game.time_game_seconds_x)
             list_enemi_global.remove(self)
@@ -207,8 +208,9 @@ class Enemi:
     def draw(self):
         pyxel.blt(self.x, self.y, self.tileset, self.tileset_x, self.tileset_y, self.width * self.side, self.height, colkey = 2, scale=self.scale)
 
-poid_enemi_mini = 1
 class Enemi_mini(Enemi):
+    score = 10
+    poids = 1
     def __init__(self, coo_x, coo_y):
         super().__init__(coo_x, coo_y)
         self.scale = pyxel.rndf(0.4,0.8)
@@ -216,14 +218,18 @@ class Enemi_mini(Enemi):
         self.base_life = 1
         self.life = self.base_life 
 
-poid_enemi_mage = 5
+
 class Enemi_mage(Enemi):
+    score = 50
+    poids = 5
     def __init__(self,coo_x,coo_y):
         super().__init__(coo_x,coo_y)
 
         self.base_speed = 0.3
         self.base_life = 2
         self.life = self.base_life 
+        self.poids_enemi_mage = 5
+
 
         self.tileset_x_base = 128
         self.tileset_y_base = 16
@@ -256,25 +262,28 @@ class Enemi_mage(Enemi):
     def update_side(self):
         self.side = 1 if self.dx_player < 0 else -1
 
-poid_enemi_mage_mini = 2
 class Enemi_mage_mini(Enemi_mage):
+    poids = 2
+    score = 20
     def __init__(self, coo_x, coo_y):
         super().__init__(coo_x, coo_y)
         self.base_life = 1
-        self.life = self.base_life 
+        self.life = self.base_life
         self.speed = 0.6
         self.time_kill_colldown = 3
         self.scale = pyxel.rndf(0.4,0.8)
 
-poid_enemi_mage_pro = 1
+
 class Enemi_mage_pro(Enemi_mage):
+    poids = 1
+    score = 10
     def __init__(self, coo_x, coo_y):
         super().__init__(coo_x, coo_y)
         self.base_speed = 0.2
         self.scale = pyxel.rndf(1.4,1.6)
         self.base_life = 4
-        self.life = self.base_life 
-        
+        self.life = self.base_life
+      
     def update_player_interaction(self):
         #attack du monstre
         if (self.distance_to_player <= self.dmin_player_attack) and self.colldown_over:
@@ -375,11 +384,11 @@ class Enemi_mage_projectile:
 
 
 list_type_enemi = (
-    [Enemi] * poid_enemi +
-    [Enemi_mage] * poid_enemi_mage+
-    [Enemi_mage_pro] * poid_enemi_mage_pro+
-    [Enemi_mini] * poid_enemi_mini+
-    [Enemi_mage_mini] * poid_enemi_mage_mini
+    [Enemi] * Enemi.poids +
+    [Enemi_mage] * Enemi_mage.poids+
+    [Enemi_mage_pro] * Enemi_mage_pro.poids+
+    [Enemi_mini] * Enemi_mini.poids+
+    [Enemi_mage_mini] * Enemi_mage_mini.poids
 )
 
     

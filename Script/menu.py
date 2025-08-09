@@ -463,7 +463,6 @@ class Game:
                 
 
             pyxel.camera(player.player.x - 128, player.player.y-128)
-            score.update_score()
 
         def draw(self):
             pyxel.cls(self.background_color)

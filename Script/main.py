@@ -18,7 +18,7 @@ class App():
         self.fps = 30
 
         pyxel.init(256, 256, title="Terminal V1.1", fps=self.fps)
-        pyxel.load("../Template/2.pyxres")
+        pyxel.load("./Template/2.pyxres")
 
         self.current_scene = menu.menu  # Scène actuelle : menu par défaut
         self.old_scene = self.current_scene
